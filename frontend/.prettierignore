@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+
+# Build outputs
+ios/
+android/
+
+# Generated files
+*.generated.*
+
+# Coverage
+coverage/
+
+# Python files (for monorepo compatibility)
+*.py
+*.pyc
+__pycache__/
+../backend/
