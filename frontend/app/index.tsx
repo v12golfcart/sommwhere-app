@@ -1,31 +1,32 @@
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { colors } from '../src/theme';
-import { router } from 'expo-router';
+import { router, useRootNavigationState } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function App() {
   const isAuthenticated = true;
+  const navigationState = useRootNavigationState();
 
   useEffect(() => {
+    // if the navigation state is not loaded, don't do anything
+    if (!navigationState?.key) {
+      return;
+    }
+
+    // if the user is authenticated, redirect to the capture screen
     if (isAuthenticated) {
       router.replace('/capture');
     } else {
       router.replace('/login');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigationState?.key]);
 
+  // show a loading indicator while the navigation state is loading
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color={colors.secondary} />
     </View>
   );
-
-  // return (
-  //   <View style={styles.container}>
-  //     <Text style={styles.header}>H!!</Text>
-  //     <Text style={styles.subtitle}>What wine do you want to drink today?</Text>
-  //   </View>
-  // );
 }
 
 const styles = StyleSheet.create({
