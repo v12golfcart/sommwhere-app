@@ -30,15 +30,19 @@ This is a monorepo with the following structure:
 
 ### Frontend
 - **Framework**: React Native with Expo
-- **Language**: TypeScript/JavaScript
-- **State Management**: TBD
-- **UI Components**: TBD
+- **Navigation**: Expo Router (file-based routing)
+- **Language**: TypeScript
+- **State Management**: Zustand (planned)
+- **UI Components**: Custom components (Page, Button)
+- **Styling**: Theme-based with custom colors
+- **Fonts**: Marcellus (headers), PT Serif (body)
+- **Toast**: react-native-toast-message
 
 ### Backend
 - **Language**: Python
-- **Framework**: TBD (FastAPI/Django/Flask)
-- **Database**: TBD
-- **Authentication**: TBD
+- **Framework**: Flask (planned)
+- **Database**: Supabase
+- **Authentication**: Supabase Auth with Google OAuth
 - **AI/ML**: TBD (likely using LangChain/LlamaIndex for agent orchestration)
 
 ## Development Commands
@@ -46,7 +50,12 @@ This is a monorepo with the following structure:
 ### Frontend
 ```bash
 cd frontend
-# Commands will be added as the project develops
+npm install              # Install dependencies
+npm run ios             # Run on iOS simulator
+npx eas-cli@latest build --profile development --platform ios  # Build dev client
+npx eas-cli@latest build --profile production --platform ios   # Build for TestFlight
+npm run lint            # Run ESLint
+npm run format          # Format with Prettier
 ```
 
 ### Backend

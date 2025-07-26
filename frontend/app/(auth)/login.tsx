@@ -1,20 +1,24 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../src/theme';
-import { Page } from '../../src/components';
+import { Page, IconButton } from '../../src/components';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 
 const GoogleLoginButton = () => {
   const handlePress = () => {
-    router.replace('/username');
+    // doing navigate instead of replace for a back button,
+    // but in the future we should use replace after google auth is successful (shouldn't be able to go back after that)
+    router.navigate('/username');
   };
 
   return (
-    <TouchableOpacity style={[styles.button, styles.buttonGoogle]} onPress={handlePress}>
-      <Ionicons name="logo-google" size={20} color="white" />
-      <Text style={styles.buttonText}>Continue with Google</Text>
-    </TouchableOpacity>
+    <IconButton
+      text="Continue with Google"
+      onPress={handlePress}
+      color="#4285F4"
+      icon={<Ionicons name="logo-google" size={20} color="white" />}
+    />
   );
 };
 
@@ -30,10 +34,12 @@ const AppleLoginButton = () => {
   };
 
   return (
-    <TouchableOpacity style={[styles.button, styles.buttonApple]} onPress={handlePress}>
-      <Ionicons name="logo-apple" size={20} color="white" />
-      <Text style={styles.buttonText}>Continue with Apple</Text>
-    </TouchableOpacity>
+    <IconButton
+      text="Continue with Apple"
+      onPress={handlePress}
+      color="#000000"
+      icon={<Ionicons name="logo-apple" size={20} color="white" />}
+    />
   );
 };
 
@@ -81,27 +87,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 40,
     gap: 12,
-  },
-  // button
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    minWidth: 250,
-  },
-  buttonGoogle: {
-    backgroundColor: '#4285F4',
-  },
-  buttonApple: {
-    backgroundColor: '#000000',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    marginLeft: 12,
-    fontFamily: 'PTSerif',
   },
 });
