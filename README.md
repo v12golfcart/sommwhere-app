@@ -6,6 +6,52 @@ AI-powered wine sommelier app
 - `/frontend` - React Native (Expo) mobile app
 - `/backend` - Python Flask API server
 
+## Navigation Architecture
+
+### Frontend Route Structure
+```
+/app
+  _layout.tsx                    # Root layout with auth context
+  index.tsx                      # Traffic controller for redirects
+  
+  /(auth)/                       # Unauthenticated flow
+    _layout.tsx                  # Stack navigator
+    welcome.tsx                  # Landing screen
+    login.tsx                    # Google OAuth
+    username.tsx                 # Required: set username
+    profile-setup.tsx            # Optional: wine preferences
+  
+  /(app)/                        # Protected/authenticated wrapper
+    _layout.tsx                  # Auth guard
+    (tabs)/                      # Main app
+      _layout.tsx                # Tab navigator
+      capture.tsx                # Default tab - wine capture
+      activity.tsx               # Activity feed
+      settings.tsx               # User settings
+  
+  (modals)/                      # Full-screen modals
+    _layout.tsx                  # Modal presentation config
+    changelog.tsx                # What's new
+    profile-update.tsx           # Update profile
+    tutorial/                    # Multi-step flows
+      _layout.tsx
+      [step].tsx
+```
+
+### Key Navigation Decisions
+- **Route groups** keep auth and app states clearly separated
+- **Protected wrapper** `/(app)/` ensures all authenticated routes are guarded
+- **Modals at root level** allows them to properly overlay tabs
+- **Traffic controller** (`index.tsx`) handles initial routing logic based on auth state
+- **Dynamic routes** (`[step].tsx`) for repetitive screens like tutorials
+
+### Implementation Notes
+- Use parentheses `()` for route groups that don't affect URL structure
+- Modals group configured with `presentation: 'modal'` in root layout
+- Auth state managed by Zustand store wrapped in root layout
+- Deep linking scheme: `sommwhere://` configured in app.json
+- Protected routes redirect to `/(auth)/welcome` when unauthenticated
+
 ## Authentication Plan
 
 ### Tech Stack
