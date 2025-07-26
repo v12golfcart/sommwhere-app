@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { colors } from '../../src/theme';
 import { Page, Button } from '../../src/components';
 
@@ -22,38 +22,44 @@ export default function App() {
 
   return (
     <Page style={styles.onboardingPage}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Choose a Username</Text>
-        <Text style={styles.subtitle}>
-          This will appear on your profile. You can change it later.
-        </Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your username"
-          value={usernameText}
-          onChangeText={setUsernameText}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <View style={styles.validationContainer}>
-          {hasCapitalLetters && (
-            <Text style={styles.validationText}>• No capital letters allowed</Text>
-          )}
-          {hasSpecialChars && (
-            <Text style={styles.validationText}>
-              • Only letters, numbers, and underscores allowed
-            </Text>
-          )}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.keyboardAvoid}
+      >
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Choose a Username</Text>
+          <Text style={styles.subtitle}>
+            This will appear on your profile. You can change it later.
+          </Text>
         </View>
-      </View>
-      <Button
-        text="Set Username"
-        onPress={handleSetUsername}
-        disabled={!isValid}
-        style={styles.submitButton}
-      />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your username"
+            value={usernameText}
+            onChangeText={setUsernameText}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="default"
+          />
+          <View style={styles.validationContainer}>
+            {hasCapitalLetters && (
+              <Text style={styles.validationText}>• No capital letters allowed</Text>
+            )}
+            {hasSpecialChars && (
+              <Text style={styles.validationText}>
+                • Only letters, numbers, and underscores allowed
+              </Text>
+            )}
+          </View>
+        </View>
+        <Button
+          text="Set Username"
+          onPress={handleSetUsername}
+          disabled={!isValid}
+          style={styles.submitButton}
+        />
+      </KeyboardAvoidingView>
     </Page>
   );
 }
@@ -64,6 +70,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 32,
     paddingRight: 32,
+  },
+  keyboardAvoid: {
+    flex: 1,
+    width: '100%',
   },
   headerContainer: {
     marginTop: 200,
