@@ -1,11 +1,12 @@
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import { colors } from '../src/theme';
-import { router, useRootNavigationState } from 'expo-router';
 import { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { router, useRootNavigationState } from 'expo-router';
+import { Page } from '../src/components';
+import { colors } from '../src/theme';
 
 export default function App() {
-  const isAuthenticated = true;
   const navigationState = useRootNavigationState();
+  const isAuthenticated = false;
 
   useEffect(() => {
     // if the navigation state is not loaded, don't do anything
@@ -23,27 +24,8 @@ export default function App() {
 
   // show a loading indicator while the navigation state is loading
   return (
-    <View style={styles.container}>
+    <Page>
       <ActivityIndicator size="large" color={colors.secondary} />
-    </View>
+    </Page>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    fontSize: 20,
-    color: colors.secondary,
-    fontFamily: 'Marcellus',
-  },
-  subtitle: {
-    fontSize: 15,
-    color: colors.text,
-    fontFamily: 'PTSerif',
-  },
-});
