@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import { colors } from '../../src/theme';
-import { Page, Button } from '../../src/components';
+import { colors } from '../../../src/theme';
+import { Page, Button } from '../../../src/components';
 
 export default function OnboardingUsername() {
   const [usernameText, setUsernameText] = useState('');
@@ -16,7 +16,7 @@ export default function OnboardingUsername() {
   const handleSetUsername = () => {
     if (isValid) {
       // TODO save username to DB
-      router.navigate('/tasteProfile');
+      router.navigate('/onboarding/tasteProfile');
     }
   };
 

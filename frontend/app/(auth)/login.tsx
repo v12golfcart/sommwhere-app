@@ -9,7 +9,7 @@ const GoogleLoginButton = () => {
   const handlePress = () => {
     // doing navigate instead of replace for a back button,
     // but in the future we should use replace after google auth is successful (shouldn't be able to go back after that)
-    router.navigate('/username');
+    router.navigate('/onboarding/username');
   };
 
   return (

@@ -6,7 +6,7 @@ export default function AuthLayout() {
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen
-        name="username"
+        name="onboarding/username"
         options={{
           headerShown: true,
           headerTransparent: true,
@@ -17,7 +17,7 @@ export default function AuthLayout() {
         }}
       />
       <Stack.Screen
-        name="tasteProfile"
+        name="onboarding/tasteProfile"
         options={{
           headerShown: true,
           headerTransparent: true,
