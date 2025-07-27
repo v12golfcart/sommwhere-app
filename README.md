@@ -12,6 +12,30 @@ AI-powered wine sommelier app
 - `/frontend` - React Native (Expo) mobile app
 - `/backend` - Python Flask API server
 
+### Backend Architecture (Planned)
+```
+/backend
+  /app
+    /routes      # API endpoints (auth, wine analysis)
+    /agents      # AI agents for wine analysis
+    /models      # Database models
+    /utils       # Helpers, middleware
+  main.py        # Flask application entry point
+  requirements.txt
+  .python-version  # Python 3.13.5
+```
+
+**Tech Stack:**
+- Python 3.13.5 (managed with pyenv)
+- Flask for API framework
+- Supabase for auth & database
+- AI agents for wine analysis
+- Deployment: Railway
+
+**Core Features:**
+1. Authentication - User creation, login, profile management
+2. Wine Analysis - Image-based wine analysis using AI agents
+
 ## Navigation Architecture
 
 ### Frontend Route Structure
@@ -79,11 +103,15 @@ AI-powered wine sommelier app
 - **TestFlight**: Full auth flow working with mock data
 
 #### Milestone 2: Backend Foundation  
-- Flask API setup
+- Flask API setup with Python 3.13.5
+- Project structure with routes, agents, models, utils
 - Supabase project with Google OAuth
 - Database schema (users, profiles)
-- Basic endpoints (/auth/callback, /profile)
+- Authentication endpoints (/auth/login, /auth/callback)
+- Profile management endpoints (/profile)
+- JWT token verification middleware
 - **TestFlight**: No changes, backend ready
+- **Deployment**: Railway configuration
 
 #### Milestone 3: Connect Auth
 - Implement react-native-app-auth
