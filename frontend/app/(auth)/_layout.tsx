@@ -16,6 +16,17 @@ export default function AuthLayout() {
           headerTintColor: colors.text, // Color of back button
         }}
       />
+      <Stack.Screen
+        name="tasteProfile"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: '',
+          headerBackTitle: 'Back',
+          headerShadowVisible: false,
+          headerTintColor: colors.text, // Color of back button
+        }}
+      />
     </Stack>
   );
 }

@@ -43,7 +43,7 @@ const AppleLoginButton = () => {
   );
 };
 
-export default function App() {
+export default function OnboardingLogin() {
   return (
     <Page>
       <View style={styles.splashContainer}>

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } fro
 import { colors } from '../../src/theme';
 import { Page, Button } from '../../src/components';
 
-export default function App() {
+export default function OnboardingUsername() {
   const [usernameText, setUsernameText] = useState('');
 
   const isValid = usernameText.length >= 3 && /^[a-z0-9_]+$/.test(usernameText);
