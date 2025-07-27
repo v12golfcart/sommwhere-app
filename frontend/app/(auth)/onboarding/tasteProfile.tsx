@@ -39,8 +39,7 @@ export default function OnboardingTasteProfile() {
             placeholder={`Dry napa cabs...I LOVE ${flavorTextWineOptions[Math.floor(Math.random() * flavorTextWineOptions.length)]}`}
             value={favoriteWine}
             onChangeText={setFavoriteWine}
-            autoCapitalize="none"
-            autoCorrect={false}
+            autoCorrect={true}
             keyboardType="default"
             multiline={true}
             numberOfLines={4}
