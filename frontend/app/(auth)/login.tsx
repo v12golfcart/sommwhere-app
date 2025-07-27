@@ -4,11 +4,22 @@ import { Page, IconButton } from '../../src/components';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import { useAuthStore } from '../../src/stores/authStore';
 
 const GoogleLoginButton = () => {
+  const login = useAuthStore((state) => state.login);
+  const user = useAuthStore((state) => state.user);
+
   const handlePress = () => {
-    // doing navigate instead of replace for a back button,
-    // but in the future we should use replace after google auth is successful (shouldn't be able to go back after that)
+    // MOCK LOGIN
+    const mockUser = {
+      userId: '123',
+      username: '',
+      tasteProfile: null,
+    };
+    login(mockUser);
+
+    // TODO, switch to replace to avoid going "back"
     router.navigate('/onboarding/username');
   };
 

@@ -3,11 +3,16 @@ import { router } from 'expo-router';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { colors } from '../../../src/theme';
 import { Page, Button } from '../../../src/components';
+import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingTasteProfile() {
   const [favoriteWine, setFavoriteWine] = useState('');
+  const setTasteProfile = useAuthStore((state) => state.setTasteProfile);
+  const user = useAuthStore((state) => state.user);
 
   const handleSetFavoriteWine = () => {
+    setTasteProfile(favoriteWine);
+
     // TODO save favorite wine to DB
     router.navigate('/capture');
   };

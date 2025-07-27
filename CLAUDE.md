@@ -32,8 +32,8 @@ This is a monorepo with the following structure:
 - **Framework**: React Native with Expo
 - **Navigation**: Expo Router (file-based routing)
 - **Language**: TypeScript
-- **State Management**: Zustand (planned)
-- **UI Components**: Custom components (Page, Button)
+- **State Management**: Zustand (implemented with authStore)
+- **UI Components**: Custom components (Page, Button, IconButton)
 - **Styling**: Theme-based with custom colors
 - **Fonts**: Marcellus (headers), PT Serif (body)
 - **Toast**: react-native-toast-message
@@ -64,7 +64,11 @@ cd backend
 # Commands will be added as the project develops
 ```
 
-## Key Features (Planned)
+## Key Features
+### Implemented
+- Onboarding flow with OAuth (mocked), username and wine preference selection
+
+### Planned
 - Wine recommendations based on user preferences
 - Food pairing suggestions
 - Wine education and tasting notes
@@ -76,9 +80,16 @@ cd backend
 - The frontend will be a React Native app for cross-platform mobile support
 - Authentication will be managed by the backend
 - AI agents will provide sommelier expertise through natural language interactions
+- Auth state is managed by Zustand with a clear separation between auth status and user profile
+- Navigation uses a traffic controller pattern (index.tsx) to route based on auth state
 
 ## Setup Instructions
-(To be added as the project develops)
+
+### Frontend Setup
+1. Navigate to frontend directory: `cd frontend`
+2. Install dependencies: `npm install`
+3. Run on iOS simulator: `npm run ios`
+4. The app will start with the auth flow (currently using mock authentication)
 
 ## Testing Strategy
 (To be defined)

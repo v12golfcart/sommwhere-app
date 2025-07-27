@@ -3,10 +3,11 @@ import { ActivityIndicator } from 'react-native';
 import { router, useRootNavigationState } from 'expo-router';
 import { Page } from '../src/components';
 import { colors } from '../src/theme';
+import { useAuthStore } from '../src/stores/authStore';
 
 export default function App() {
   const navigationState = useRootNavigationState();
-  const isAuthenticated = false;
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   useEffect(() => {
     // if the navigation state is not loaded, don't do anything

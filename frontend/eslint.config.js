@@ -52,6 +52,7 @@ module.exports = [
       'react-native/no-raw-text': ['warn', { skip: ['Text'] }],
       
       // TypeScript
+      'no-unused-vars': 'off', // Disable base rule
       '@typescript-eslint/no-unused-vars': ['warn', { 
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',

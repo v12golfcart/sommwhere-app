@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { colors } from '../../../src/theme';
 import { Page, Button } from '../../../src/components';
+import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingUsername() {
   const [usernameText, setUsernameText] = useState('');
@@ -13,8 +14,13 @@ export default function OnboardingUsername() {
   const hasCapitalLetters = /[A-Z]/.test(usernameText);
   const hasSpecialChars = usernameText.length > 0 && !/^[a-zA-Z0-9_]*$/.test(usernameText);
 
+  const setUsername = useAuthStore((state) => state.setUsername);
+  const user = useAuthStore((state) => state.user);
+
   const handleSetUsername = () => {
     if (isValid) {
+      setUsername(usernameText);
+
       // TODO save username to DB
       router.navigate('/onboarding/tasteProfile');
     }

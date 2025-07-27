@@ -4,9 +4,9 @@ AI-powered wine sommelier app
 
 ## Current Progress
 
-**Frontend**: Navigation structure complete, auth screens 90% built, reusable components created
-**Backend**: Not started
-**Next Steps**: Complete taste profile screen, add Zustand for state management, begin backend setup
+**Frontend**: ✅ Milestone 1 Complete! Full auth flow with mock authentication working
+**Backend**: Not started (Milestone 2)
+**Next Steps**: Begin backend setup with Flask and Supabase
 
 ## Project Structure
 - `/frontend` - React Native (Expo) mobile app
@@ -23,8 +23,9 @@ AI-powered wine sommelier app
   /(auth)/                       # Unauthenticated flow
     _layout.tsx                  # Stack navigator with transparent headers
     login.tsx                    # Google OAuth + Apple (coming soon)
-    username.tsx                 # Required: set username
-    tasteProfile.tsx             # Optional: wine preferences
+    /onboarding/                 # New user setup flow
+      username.tsx               # Required: set username
+      tasteProfile.tsx           # Required: wine preferences
   
   /(tabs)/                       # Main app (no wrapper)
     _layout.tsx                  # Tab navigator with icons
@@ -47,6 +48,7 @@ AI-powered wine sommelier app
 - **Modals at root level** allows them to properly overlay tabs
 - **Traffic controller** (`index.tsx`) handles initial routing logic based on auth state
 - **Dynamic routes** (`[step].tsx`) for repetitive screens like tutorials
+- **Onboarding subfolder** keeps new user flow organized separately from login
 
 ### Implementation Notes
 - Use parentheses `()` for route groups that don't affect URL structure
@@ -64,16 +66,17 @@ AI-powered wine sommelier app
 
 ### Development Milestones
 
-#### Milestone 1: Frontend Shell ✅ (90% Complete)
+#### Milestone 1: Frontend Shell ✅ COMPLETE
 - ✅ Set up Expo Router with file-based navigation
-- ✅ Built login screen with Google OAuth button
+- ✅ Built login screen with Google OAuth button (mock)
 - ✅ Built username selection screen with validation
-- ⏳ Build taste profile screen (next)
-- ✅ Created reusable components (Page, Button)
+- ✅ Built taste profile screen with character limit
+- ✅ Created reusable components (Page, Button, IconButton)
 - ✅ Implemented theme with custom colors and fonts
 - ✅ Added toast notifications
-- ⏳ Mock auth with Zustand (next)
-- **TestFlight**: Basic navigation flow working
+- ✅ Mock auth with Zustand store
+- ✅ Auth state change logging for debugging
+- **TestFlight**: Full auth flow working with mock data
 
 #### Milestone 2: Backend Foundation  
 - Flask API setup
