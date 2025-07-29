@@ -32,11 +32,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'tan',
   },
-  scrollView: {
-    backgroundColor: 'lightblue',
-  },
+  scrollView: {},
   scrollContent: {
     flexGrow: 1,
   },
@@ -45,7 +42,5 @@ const styles = StyleSheet.create({
     paddingBottom: 34, // Account for safe area
     paddingTop: 16,
     backgroundColor: colors.background,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
   },
 });
