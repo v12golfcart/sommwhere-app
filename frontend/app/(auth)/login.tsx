@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     marginBottom: 48,
-    gap: 16,
+    gap: 8,
     flex: 0.65,
     justifyContent: 'flex-end',
   },
