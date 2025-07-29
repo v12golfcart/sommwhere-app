@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from '../src/stores/authStore';
 
 SplashScreen.preventAutoHideAsync();
@@ -65,7 +66,7 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <SafeAreaProvider>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -76,6 +77,6 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
       </Stack>
       <Toast />
-    </>
+    </SafeAreaProvider>
   );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { KeyboardAvoidingView, ScrollView, Platform, View, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../theme';
 
 interface Props {
@@ -9,10 +10,13 @@ interface Props {
 }
 
 export default function KeyboardAvoidingContainer({ children, footer, bounces = true }: Props) {
+  const insets = useSafeAreaInsets();
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? insets.top : 0}
     >
       <ScrollView
         style={styles.scrollView}
@@ -23,7 +27,11 @@ export default function KeyboardAvoidingContainer({ children, footer, bounces = 
       >
         {children}
       </ScrollView>
-      {footer && <View style={styles.footer}>{footer}</View>}
+      {footer && (
+        <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+          {footer}
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -39,7 +47,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 24,
-    paddingBottom: 34, // Account for safe area
     paddingTop: 16,
     backgroundColor: colors.background,
   },
