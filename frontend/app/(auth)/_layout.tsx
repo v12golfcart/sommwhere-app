@@ -6,6 +6,28 @@ export default function AuthLayout() {
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen
+        name="phone"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: '',
+          headerBackTitle: 'Back',
+          headerShadowVisible: false,
+          headerTintColor: colors.text, // Color of back button
+        }}
+      />
+      <Stack.Screen
+        name="otp"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: '',
+          headerBackTitle: 'Back',
+          headerShadowVisible: false,
+          headerTintColor: colors.text, // Color of back button
+        }}
+      />
+      <Stack.Screen
         name="onboarding/username"
         options={{
           headerShown: true,

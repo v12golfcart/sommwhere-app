@@ -1,5 +1,6 @@
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../theme';
 
 interface Props {
@@ -7,23 +8,33 @@ interface Props {
   style?: ViewStyle;
   backgroundColor?: string;
   statusBarStyle?: 'auto' | 'light' | 'dark' | 'inverted';
+  edges?: Array<'top' | 'right' | 'bottom' | 'left'>;
 }
 
-export default function Page({ children, style, backgroundColor, statusBarStyle = 'auto' }: Props) {
+export default function Page({
+  children,
+  style,
+  backgroundColor,
+  statusBarStyle = 'auto',
+  edges = ['top', 'bottom', 'left', 'right'],
+}: Props) {
   return (
-    <View style={[styles.container, backgroundColor && { backgroundColor }, style]}>
-      {children}
-      <StatusBar style={statusBarStyle} />
-    </View>
+    <SafeAreaView style={[styles.safeArea, backgroundColor && { backgroundColor }]} edges={edges}>
+      <View style={[styles.container, style]}>
+        {children}
+        <StatusBar style={statusBarStyle} />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  container: {
+    flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
   },
