@@ -42,7 +42,7 @@ This is a monorepo with the following structure:
 - **Language**: Python
 - **Framework**: Flask (planned)
 - **Database**: Supabase
-- **Authentication**: Supabase Auth with Google OAuth
+- **Authentication**: Supabase Auth with Phone/SMS (via Twilio)
 - **AI/ML**: TBD (likely using LangChain/LlamaIndex for agent orchestration)
 
 ## Development Commands
@@ -67,6 +67,10 @@ cd backend
 ## Key Features
 ### Implemented
 - Onboarding flow with OAuth (mocked), username and wine preference selection
+- Backend API with Supabase database integration
+
+### In Progress
+- Migration from OAuth to phone authentication (SMS via Twilio)
 
 ### Planned
 - Wine recommendations based on user preferences
@@ -78,7 +82,8 @@ cd backend
 ## Architecture Notes
 - The backend will handle all AI processing and database operations
 - The frontend will be a React Native app for cross-platform mobile support
-- Authentication will be managed by the backend
+- Authentication will be managed by Supabase with phone/SMS verification
+- Phone authentication flow: Phone input → OTP verification → Username → Taste profile
 - AI agents will provide sommelier expertise through natural language interactions
 - Auth state is managed by Zustand with a clear separation between auth status and user profile
 - Navigation uses a traffic controller pattern (index.tsx) to route based on auth state

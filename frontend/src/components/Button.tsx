@@ -8,6 +8,7 @@ interface ButtonProps {
   style?: StyleProp<ViewStyle>;
   textStyle?: TextStyle;
   color?: string;
+  textColor?: string;
   icon?: ReactNode;
   disabled?: boolean;
 }
@@ -18,6 +19,7 @@ export default function Button({
   style,
   textStyle,
   color = colors.secondary,
+  textColor = 'white',
   icon,
   disabled = false,
 }: ButtonProps) {
@@ -28,7 +30,7 @@ export default function Button({
       disabled={disabled}
     >
       {icon && <>{icon}</>}
-      <Text style={[styles.buttonText, textStyle]}>{text}</Text>
+      <Text style={[styles.buttonText, { color: textColor }, textStyle]}>{text}</Text>
     </TouchableOpacity>
   );
 }

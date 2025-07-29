@@ -86,7 +86,7 @@ AI-powered wine sommelier app
 ### Tech Stack
 - **Frontend**: React Native + Expo Router + Zustand
 - **Backend**: Flask + Supabase (auth & DB)
-- **Auth**: Google OAuth → Username → Wine preference
+- **Auth**: Phone authentication (SMS via Twilio) → Username → Wine preference
 
 ### Development Milestones
 
@@ -113,14 +113,17 @@ AI-powered wine sommelier app
 - **TestFlight**: No changes, backend ready
 - **Note**: Auth implementation moved to Milestone 3 (frontend handles OAuth)
 
-#### Milestone 3: Connect Auth
+#### Milestone 3: Connect Auth (Updated for Phone Auth)
 - Frontend: Implement Supabase Auth SDK for React Native
-- Frontend: Connect real Google OAuth flow
+- Frontend: Build phone number input screen with international format
+- Frontend: Build OTP verification screen with resend functionality
+- Frontend: Update auth flow (phone → OTP → username → taste profile)
 - Frontend: Secure token storage in AsyncStorage
+- Backend: Configure Supabase phone auth with Twilio
 - Backend: Add JWT verification middleware
 - Backend: Update profile endpoints to use real auth
 - Wire up frontend to backend with authenticated requests
-- **TestFlight**: Real authentication working end-to-end
+- **TestFlight**: Real phone authentication working end-to-end
 
 #### Milestone 4: Production Polish
 - Error handling & retry logic
