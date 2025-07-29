@@ -5,8 +5,8 @@ AI-powered wine sommelier app
 ## Current Progress
 
 **Frontend**: ✅ Milestone 1 Complete! Full auth flow with mock authentication working
-**Backend**: Not started (Milestone 2)
-**Next Steps**: Begin backend setup with Flask and Supabase
+**Backend**: ✅ Milestone 2 Complete! Flask API with Supabase database and profile endpoints
+**Next Steps**: Connect frontend to backend with real authentication (Milestone 3)
 
 ## Project Structure
 - `/frontend` - React Native (Expo) mobile app
@@ -102,23 +102,25 @@ AI-powered wine sommelier app
 - ✅ Auth state change logging for debugging
 - **TestFlight**: Full auth flow working with mock data
 
-#### Milestone 2: Backend Foundation  
-- Flask API setup with Python 3.13.5
-- Project structure with routes, agents, models, utils
-- Supabase project with Google OAuth
-- Database schema (users, profiles)
-- Authentication endpoints (/auth/login, /auth/callback)
-- Profile management endpoints (/profile)
-- JWT token verification middleware
+#### Milestone 2: Backend Foundation ✅ COMPLETE
+- ✅ Flask API setup with Python 3.13.5
+- ✅ Project structure with routes, agents, models, utils
+- ✅ Supabase project creation
+- ✅ Database schema (users, profiles tables)
+- ✅ Profile endpoints with mock auth (GET/PUT /profile/<user_id>)
+- ✅ Input validation (255 char limit on taste_profile)
+- ✅ Test endpoints with curl/Postman
 - **TestFlight**: No changes, backend ready
-- **Deployment**: Railway configuration
+- **Note**: Auth implementation moved to Milestone 3 (frontend handles OAuth)
 
 #### Milestone 3: Connect Auth
-- Implement react-native-app-auth
-- Connect real Google OAuth flow
-- Secure token storage
-- Wire up all endpoints
-- **TestFlight**: Real authentication working
+- Frontend: Implement Supabase Auth SDK for React Native
+- Frontend: Connect real Google OAuth flow
+- Frontend: Secure token storage in AsyncStorage
+- Backend: Add JWT verification middleware
+- Backend: Update profile endpoints to use real auth
+- Wire up frontend to backend with authenticated requests
+- **TestFlight**: Real authentication working end-to-end
 
 #### Milestone 4: Production Polish
 - Error handling & retry logic
@@ -126,3 +128,33 @@ AI-powered wine sommelier app
 - Loading states
 - Deep linking for OAuth
 - **TestFlight**: Production-ready auth
+
+## Backend Setup
+
+### Prerequisites
+- Python 3.13.5 (managed with pyenv)
+- Supabase account and project
+
+### Environment Setup
+1. Create `.env` file in `/backend` with:
+```
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_KEY=your-service-key
+SUPABASE_ANON_KEY=your-anon-key
+SECRET_KEY=your-secret-key
+```
+
+### Running the Backend
+```bash
+cd backend
+pyenv local 3.13.5
+python -m venv venv
+source venv/bin/activate  # On macOS/Linux
+pip install -r requirements.txt
+python main.py  # Runs on http://localhost:5000
+```
+
+### API Endpoints
+- `GET /health` - Health check
+- `GET /profile/<user_id>` - Get user profile
+- `PUT /profile/<user_id>` - Update user profile (username, taste_profile)
