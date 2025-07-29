@@ -6,10 +6,10 @@ import { useState } from 'react';
 
 export default function PhoneNumber() {
   const [phoneNumber, setPhoneNumber] = useState('');
-  
+
   // Basic US phone validation (10 digits)
   const isValidPhone = phoneNumber.replace(/\D/g, '').length === 10;
-  
+
   const handleContinue = () => {
     // Mock OTP send
     console.log('Sending OTP to:', phoneNumber);
@@ -19,13 +19,7 @@ export default function PhoneNumber() {
   return (
     <Page style={styles.page}>
       <KeyboardAvoidingContainer
-        footer={
-          <Button 
-            text="Continue" 
-            onPress={handleContinue}
-            disabled={!isValidPhone}
-          />
-        }
+        footer={<Button text="Continue" onPress={handleContinue} disabled={!isValidPhone} />}
         bounces={false}
       >
         <View style={styles.content}>
@@ -33,7 +27,7 @@ export default function PhoneNumber() {
             <Text style={styles.header}>Enter your phone number</Text>
             <Text style={styles.subtitle}>We'll text you a verification code</Text>
           </View>
-          
+
           <TextInput
             style={styles.input}
             placeholder="(555) 123-4567"

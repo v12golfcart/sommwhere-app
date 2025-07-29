@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { colors } from '../../../src/theme';
-import { Page, Button } from '../../../src/components';
+import { Page, Button, KeyboardAvoidingContainer } from '../../../src/components';
 import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingTasteProfile() {
@@ -20,106 +20,110 @@ export default function OnboardingTasteProfile() {
   const isValid = favoriteWine.length >= 3 && favoriteWine.length <= 255;
 
   const flavorTextWineOptions = ['Heitz', 'Austin Hope', "Stag's Leap", 'Opus One'];
+  const randomWine =
+    flavorTextWineOptions[Math.floor(Math.random() * flavorTextWineOptions.length)];
 
   return (
-    <Page style={styles.onboardingPage}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.keyboardAvoid}
+    <Page style={styles.page}>
+      <KeyboardAvoidingContainer
+        footer={<Button text="Continue" onPress={handleSetFavoriteWine} disabled={!isValid} />}
+        bounces={false}
       >
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Favorite type of wine?</Text>
-          <Text style={styles.subtitle}>
-            Whatever comes to mind! Don't worry...{'\n'} you'll change this often.
-          </Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder={`Dry napa cabs...I LOVE ${flavorTextWineOptions[Math.floor(Math.random() * flavorTextWineOptions.length)]}`}
-            value={favoriteWine}
-            onChangeText={setFavoriteWine}
-            autoCorrect={true}
-            keyboardType="default"
-            multiline={true}
-            numberOfLines={4}
-          />
-        </View>
-        <View style={styles.validationContainer}>
-          {favoriteWine.length > 100 && (
-            <Text style={[styles.validationText, isValid ? {} : styles.validationTextError]}>
-              {favoriteWine.length} / 255
+        <View style={styles.content}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.header}>What wines do you enjoy?</Text>
+            <Text style={styles.subtitle}>
+              Whatever comes to mind! Don't worry, you can change this anytime.
             </Text>
-          )}
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder={`e.g., "Dry Napa cabs... I love ${randomWine}"`}
+              placeholderTextColor={colors.textMuted}
+              value={favoriteWine}
+              onChangeText={setFavoriteWine}
+              autoCorrect={true}
+              keyboardType="default"
+              multiline={true}
+              numberOfLines={3}
+              autoFocus
+              textAlignVertical="top"
+            />
+            <View style={styles.validationContainer}>
+              {favoriteWine.length > 0 && (
+                <Text style={[styles.characterCount, !isValid && styles.characterCountError]}>
+                  {favoriteWine.length} / 255
+                </Text>
+              )}
+              {favoriteWine.length > 0 && favoriteWine.length < 3 && (
+                <Text style={styles.validationText}>Must be at least 3 characters</Text>
+              )}
+            </View>
+          </View>
         </View>
-        <Button
-          text="Set Favorite Wine"
-          onPress={handleSetFavoriteWine}
-          disabled={!isValid}
-          style={styles.submitButton}
-        />
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingContainer>
     </Page>
   );
 }
 
 const styles = StyleSheet.create({
-  onboardingPage: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    paddingLeft: 32,
-    paddingRight: 32,
+  page: {
+    paddingLeft: 0,
+    paddingRight: 0,
   },
-  keyboardAvoid: {
+  content: {
     flex: 1,
-    width: '100%',
+    paddingHorizontal: 24,
+    paddingTop: 60,
   },
   headerContainer: {
-    marginTop: 200,
-    alignItems: 'center',
+    marginBottom: 32,
   },
   header: {
-    fontSize: 32,
-    color: colors.secondary,
+    fontSize: 28,
+    color: colors.text,
     fontFamily: 'Marcellus',
+    marginBottom: 8,
   },
   subtitle: {
-    fontSize: 15,
-    color: colors.text,
+    fontSize: 16,
+    color: colors.textMuted,
     fontFamily: 'PTSerif',
-    textAlign: 'center',
   },
-  // text input
   inputContainer: {
-    marginTop: 20,
     width: '100%',
   },
   input: {
-    borderWidth: 1,
-    borderColor: colors.secondary,
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'PTSerif',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.border,
+    paddingVertical: 12,
     color: colors.text,
+    // minHeight: 100,
+    lineHeight: 24,
   },
-  // validation
   validationContainer: {
-    marginTop: 4,
-    minHeight: 20, // Reserve space for up to 2 lines of validation text
+    marginTop: 12,
+    minHeight: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  validationText: {
-    fontSize: 12,
-    color: colors.text,
+  characterCount: {
+    fontSize: 14,
+    color: colors.textMuted,
     fontFamily: 'PTSerif',
-    marginBottom: 4,
-    textAlign: 'right',
+    marginLeft: 'auto',
   },
-  validationTextError: {
+  characterCountError: {
     color: colors.error,
   },
-  // submit button
-  submitButton: {
-    marginTop: 20,
+  validationText: {
+    fontSize: 14,
+    color: colors.error,
+    fontFamily: 'PTSerif',
   },
 });

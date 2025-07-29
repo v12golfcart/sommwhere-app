@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { colors } from '../../../src/theme';
-import { Page, Button } from '../../../src/components';
+import { Page, Button, KeyboardAvoidingContainer } from '../../../src/components';
 import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingUsername() {
@@ -27,101 +27,99 @@ export default function OnboardingUsername() {
   };
 
   return (
-    <Page style={styles.onboardingPage}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.keyboardAvoid}
-      >
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Choose a Username</Text>
-          <Text style={styles.subtitle}>
-            This will appear on your profile. You can change it later.
-          </Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your username"
-            value={usernameText}
-            onChangeText={setUsernameText}
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="default"
+    <Page style={styles.page}>
+      <KeyboardAvoidingContainer
+        footer={
+          <Button
+            text="Continue"
+            onPress={handleSetUsername}
+            disabled={!isValid}
           />
-          <View style={styles.validationContainer}>
-            {hasCapitalLetters && (
-              <Text style={styles.validationText}>• No capital letters allowed</Text>
-            )}
-            {hasSpecialChars && (
-              <Text style={styles.validationText}>
-                • Only letters, numbers, and underscores allowed
-              </Text>
-            )}
+        }
+        bounces={false}
+      >
+        <View style={styles.content}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.header}>Choose a username</Text>
+            <Text style={styles.subtitle}>
+              This will appear on your profile. You can change it later.
+            </Text>
+          </View>
+          
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="username"
+              placeholderTextColor={colors.textMuted}
+              value={usernameText}
+              onChangeText={setUsernameText}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="default"
+              autoFocus
+            />
+            <View style={styles.validationContainer}>
+              {hasCapitalLetters && (
+                <Text style={styles.validationText}>• No capital letters allowed</Text>
+              )}
+              {hasSpecialChars && (
+                <Text style={styles.validationText}>
+                  • Only letters, numbers, and underscores allowed
+                </Text>
+              )}
+              {usernameText.length > 0 && usernameText.length < 3 && (
+                <Text style={styles.validationText}>• Must be at least 3 characters</Text>
+              )}
+            </View>
           </View>
         </View>
-        <Button
-          text="Set Username"
-          onPress={handleSetUsername}
-          disabled={!isValid}
-          style={styles.submitButton}
-        />
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingContainer>
     </Page>
   );
 }
 
 const styles = StyleSheet.create({
-  onboardingPage: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    paddingLeft: 32,
-    paddingRight: 32,
+  page: {
+    paddingLeft: 0,
+    paddingRight: 0,
   },
-  keyboardAvoid: {
+  content: {
     flex: 1,
-    width: '100%',
+    paddingHorizontal: 24,
+    paddingTop: 60,
   },
   headerContainer: {
-    marginTop: 200,
-    alignItems: 'center',
+    marginBottom: 32,
   },
   header: {
-    fontSize: 32,
-    color: colors.secondary,
+    fontSize: 28,
+    color: colors.text,
     fontFamily: 'Marcellus',
+    marginBottom: 8,
   },
   subtitle: {
-    fontSize: 15,
-    color: colors.text,
+    fontSize: 16,
+    color: colors.textMuted,
     fontFamily: 'PTSerif',
-    textAlign: 'center',
   },
-  // text input
   inputContainer: {
-    marginTop: 20,
     width: '100%',
   },
   input: {
-    borderWidth: 1,
-    borderColor: colors.secondary,
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 16,
+    fontSize: 24,
     fontFamily: 'PTSerif',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.border,
+    paddingVertical: 12,
     color: colors.text,
   },
-  // submit button
-  submitButton: {
-    marginTop: 4,
-  },
-  // validation
   validationContainer: {
-    marginTop: 4,
-    minHeight: 40, // Reserve space for up to 2 lines of validation text
+    marginTop: 12,
+    minHeight: 60, // Reserve space for validation messages
   },
   validationText: {
-    fontSize: 12,
-    color: colors.secondary,
+    fontSize: 14,
+    color: colors.error,
     fontFamily: 'PTSerif',
     marginBottom: 4,
   },
