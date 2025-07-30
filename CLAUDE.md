@@ -83,7 +83,11 @@ cd backend
 - The backend will handle all AI processing and database operations
 - The frontend will be a React Native app for cross-platform mobile support
 - Authentication will be managed by Supabase with phone/SMS verification
-- Phone authentication flow: Phone input → OTP verification → Username → Taste profile
+- **Unified auth flow**: Single flow for both login and signup
+  - Phone input → OTP verification
+  - Backend determines if user exists
+  - New users → Username → Taste profile → Main app
+  - Existing users → Main app (skip onboarding)
 - AI agents will provide sommelier expertise through natural language interactions
 - Auth state is managed by Zustand with a clear separation between auth status and user profile
 - Navigation uses a traffic controller pattern (index.tsx) to route based on auth state

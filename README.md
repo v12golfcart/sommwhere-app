@@ -86,7 +86,17 @@ AI-powered wine sommelier app
 ### Tech Stack
 - **Frontend**: React Native + Expo Router + Zustand
 - **Backend**: Flask + Supabase (auth & DB)
-- **Auth**: Phone authentication (SMS via Twilio) → Username → Wine preference
+- **Auth**: Phone authentication (SMS via Twilio)
+
+### Unified Auth Flow
+The app uses a single flow for both login and signup:
+1. User enters phone number
+2. User receives and enters OTP
+3. Backend checks if user exists:
+   - **New users**: Directed to onboarding (username → taste profile)
+   - **Existing users**: Directed straight to main app (tabs)
+
+This approach eliminates user confusion about whether to "log in" or "sign up".
 
 ### Development Milestones
 
