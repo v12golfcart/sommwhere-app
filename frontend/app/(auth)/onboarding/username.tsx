@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../../src/theme';
-import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon } from '../../../src/components';
+import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon, TextInput } from '../../../src/components';
 import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingUsername() {
@@ -49,9 +49,7 @@ export default function OnboardingUsername() {
           
           <View style={styles.inputContainer}>
             <TextInput
-              style={styles.input}
               placeholder="username"
-              placeholderTextColor={colors.textMuted}
               value={usernameText}
               onChangeText={setUsernameText}
               autoCapitalize="none"
@@ -105,14 +103,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-  },
-  input: {
-    fontSize: 24,
-    fontFamily: 'PTSerif',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.border,
-    paddingVertical: 12,
-    color: colors.text,
   },
   validationContainer: {
     marginTop: 12,

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../../src/theme';
-import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon } from '../../../src/components';
+import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon, TextInput } from '../../../src/components';
 import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingTasteProfile() {
@@ -40,17 +40,14 @@ export default function OnboardingTasteProfile() {
 
           <View style={styles.inputContainer}>
             <TextInput
-              style={styles.input}
               placeholder={`e.g., "Dry Napa cabs... I love ${randomWine}"`}
-              placeholderTextColor={colors.textMuted}
               value={favoriteWine}
               onChangeText={setFavoriteWine}
               autoCorrect={true}
               keyboardType="default"
-              multiline={true}
+              variant="multiline"
               numberOfLines={3}
               autoFocus
-              textAlignVertical="top"
             />
             <View style={styles.validationContainer}>
               {favoriteWine.length > 0 && (
@@ -95,16 +92,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-  },
-  input: {
-    fontSize: 18,
-    fontFamily: 'PTSerif',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.border,
-    paddingVertical: 12,
-    color: colors.text,
-    // minHeight: 100,
-    lineHeight: 24,
   },
   validationContainer: {
     marginTop: 12,

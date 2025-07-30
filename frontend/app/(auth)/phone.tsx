@@ -1,6 +1,12 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../src/theme';
-import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon } from '../../src/components';
+import {
+  Page,
+  Button,
+  KeyboardAvoidingContainer,
+  OnboardingIcon,
+  TextInput,
+} from '../../src/components';
 import { router } from 'expo-router';
 import { useState } from 'react';
 
@@ -30,13 +36,11 @@ export default function PhoneNumber() {
           </View>
 
           <TextInput
-            style={styles.input}
             placeholder="(555) 123-4567"
-            placeholderTextColor={colors.textMuted}
             value={phoneNumber}
             onChangeText={setPhoneNumber}
             keyboardType="phone-pad"
-            autoFocus
+            // autoFocus
             maxLength={14}
           />
         </View>
@@ -68,13 +72,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.textMuted,
     fontFamily: 'PTSerif',
-  },
-  input: {
-    fontSize: 24,
-    fontFamily: 'PTSerif',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.border,
-    paddingVertical: 12,
-    color: colors.text,
   },
 });
