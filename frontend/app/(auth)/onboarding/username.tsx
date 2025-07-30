@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { router } from 'expo-router';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { colors } from '../../../src/theme';
-import { Page, Button, KeyboardAvoidingContainer } from '../../../src/components';
+import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon } from '../../../src/components';
 import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingUsername() {
@@ -39,6 +39,7 @@ export default function OnboardingUsername() {
         bounces={false}
       >
         <View style={styles.content}>
+          <OnboardingIcon name="person" />
           <View style={styles.headerContainer}>
             <Text style={styles.header}>Choose a username</Text>
             <Text style={styles.subtitle}>

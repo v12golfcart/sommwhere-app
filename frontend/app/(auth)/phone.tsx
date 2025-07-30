@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { colors } from '../../src/theme';
-import { Page, Button, KeyboardAvoidingContainer } from '../../src/components';
+import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon } from '../../src/components';
 import { router } from 'expo-router';
 import { useState } from 'react';
 
@@ -23,6 +23,7 @@ export default function PhoneNumber() {
         bounces={false}
       >
         <View style={styles.content}>
+          <OnboardingIcon name="call" />
           <View style={styles.headerContainer}>
             <Text style={styles.header}>Enter your phone number</Text>
             <Text style={styles.subtitle}>We'll text you a verification code</Text>

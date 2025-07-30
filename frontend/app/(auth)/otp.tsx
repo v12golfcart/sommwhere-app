@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { colors } from '../../src/theme';
-import { Page, Button, KeyboardAvoidingContainer } from '../../src/components';
+import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon } from '../../src/components';
 import { router } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 
@@ -73,6 +73,7 @@ export default function OtpScreen() {
         bounces={false}
       >
         <View style={styles.content}>
+          <OnboardingIcon name="key" />
           <View style={styles.headerContainer}>
             <Text style={styles.header}>Verify your number</Text>
             <Text style={styles.subtitle}>Enter the code we sent to your phone</Text>
