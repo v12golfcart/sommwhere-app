@@ -87,6 +87,42 @@ AI-powered wine sommelier app
 - **Frontend**: React Native + Expo Router + Zustand
 - **Backend**: Flask + Supabase (auth & DB)
 - **Auth**: Phone authentication (SMS via Twilio)
+- **Token Storage**: Expo SecureStore (encrypted device storage)
+
+### Authentication Architecture (Backend-Orchestrated)
+The backend orchestrates the entire auth flow for security and consistency:
+
+1. **Phone Entry**: User enters phone number in frontend
+2. **OTP Request**: Frontend calls `POST /auth/request-otp` → Backend calls Supabase
+3. **OTP Verification**: Frontend sends OTP to `POST /auth/verify-otp`
+   - Backend verifies with Supabase
+   - Checks if user exists in database
+   - Returns: `{isNewUser: boolean, session: {...}, profile?: {...}}`
+4. **Frontend Routing**:
+   - New users → Onboarding flow (username → taste profile)
+   - Existing users → Main app with profile data
+
+### Why Backend-Orchestrated?
+- Single source of truth for authentication logic
+- Backend can handle custom user creation/initialization
+- Easier to add features (referral codes, feature flags, etc.)
+- More secure - sensitive operations stay server-side
+- Frontend only stores the final session token in SecureStore
+
+### 401 Handling Strategy (Silent Refresh)
+When the backend returns a 401 Unauthorized response:
+
+1. **Intercept at API Client Level**: Global response interceptor catches all 401s
+2. **Attempt Silent Refresh**: 
+   - Call Supabase `session.refresh()` to get new tokens
+   - This happens transparently to the user
+3. **Retry Original Request**: If refresh succeeds, retry with new token
+4. **Graceful Fallback**: If refresh fails:
+   - Clear all auth state and SecureStore
+   - Show toast notification
+   - Redirect to login screen
+
+This provides the best UX - most token refreshes happen invisibly, and users only need to re-authenticate when absolutely necessary.
 
 ### Unified Auth Flow
 The app uses a single flow for both login and signup:
@@ -123,16 +159,16 @@ This approach eliminates user confusion about whether to "log in" or "sign up".
 - **TestFlight**: No changes, backend ready
 - **Note**: Auth implementation moved to Milestone 3 (frontend handles OAuth)
 
-#### Milestone 3: Connect Auth (Updated for Phone Auth)
-- Frontend: Implement Supabase Auth SDK for React Native
-- Frontend: Build phone number input screen with international format
-- Frontend: Build OTP verification screen with resend functionality
-- Frontend: Update auth flow (phone → OTP → username → taste profile)
-- Frontend: Secure token storage in AsyncStorage
+#### Milestone 3: Connect Auth (Backend-Orchestrated Phone Auth)
 - Backend: Configure Supabase phone auth with Twilio
-- Backend: Add JWT verification middleware
-- Backend: Update profile endpoints to use real auth
-- Wire up frontend to backend with authenticated requests
+- Backend: Implement `/auth/request-otp` endpoint
+- Backend: Implement `/auth/verify-otp` endpoint (returns isNewUser flag)
+- Backend: Add JWT verification middleware for protected routes
+- Frontend: Replace mock auth with real API calls
+- Frontend: Implement SecureStore for token storage (not AsyncStorage)
+- Frontend: Build API client with 401 interceptor for silent refresh
+- Frontend: Update auth store to handle real Supabase sessions
+- Frontend: Keep existing phone/OTP screens, wire to backend
 - **TestFlight**: Real phone authentication working end-to-end
 
 #### Milestone 4: Production Polish
