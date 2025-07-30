@@ -105,3 +105,58 @@ cd backend
 
 ## Deployment
 (To be defined)
+
+## Wine Capture Feature
+
+### Core Functionality
+The wine capture feature is the heart of sommwhere. It allows users to:
+- Take a photo or select from gallery
+- Identify wines from bottles, menus, or wine collections
+- Get instant information about each wine
+
+### Wine Identification Requirements
+- **Inputs**: Photo of wine bottle(s), wine menu, or wine label
+- **Outputs**: List of identified wines with:
+  - Varietal (e.g., Cabernet Sauvignon, Pinot Noir)
+  - Winery (e.g., Caymus, Silver Oak)
+  - Wine name (e.g., "Special Selection")
+  - Year/Vintage (if visible)
+- **Note**: AI should use its knowledge to fill gaps when info isn't fully visible
+
+### Wine Capture Development Milestones
+
+#### Sub-milestone 1: Incorporate Camera
+- Add camera/gallery picker to capture screen
+- Use Expo ImagePicker for cross-platform support
+- Show selected image preview
+- Basic UI with "Take Photo" and "Choose from Gallery" options
+
+#### Sub-milestone 2: Send Pictures to Backend
+- Create `/analyze/wine` endpoint
+- Handle image upload (multipart/form-data)
+- Add loading state during upload
+- Store images temporarily for processing
+
+#### Sub-milestone 3: Analyze Picture & Identify Wines
+- Build AI agent for wine recognition
+- Use vision model to extract text from image
+- Implement wine knowledge base lookup
+- Handle multiple wines in single image
+
+#### Sub-milestone 4: Return Wine List to Frontend
+- Structure response: `{wines: [{varietal, winery, name, year}, ...]}`
+- Display results in a clean list format
+- Handle cases where some info is missing
+- Show confidence levels if applicable
+
+#### Sub-milestone 5: Add On-the-fly Re-analysis
+- Allow users to correct/refine results
+- "This isn't right" → re-analyze with user hints
+- Learn from corrections for future improvements
+- Quick edit functionality for manual fixes
+
+#### Sub-milestone 6: Improve Brain Quality
+- Enhance wine recognition accuracy
+- Build wine database for common wines
+- Add region/appellation detection
+- Integrate sommelier knowledge for recommendations

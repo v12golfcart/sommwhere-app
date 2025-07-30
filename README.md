@@ -86,12 +86,25 @@ AI-powered wine sommelier app
 ### Tech Stack
 - **Frontend**: React Native + Expo Router + Zustand
 - **Backend**: Flask + Supabase (auth & DB)
-- **Auth**: Phone authentication (SMS via Twilio)
+- **Auth**: Dual authentication methods
+  - **Primary**: Google OAuth (immediate availability)
+  - **Secondary**: Phone authentication (SMS via Twilio - pending approval)
 - **Token Storage**: Expo SecureStore (encrypted device storage)
 
 ### Authentication Architecture (Backend-Orchestrated)
 The backend orchestrates the entire auth flow for security and consistency:
 
+#### Google OAuth Flow (Available Now)
+1. **Login Screen**: User taps "Continue with Google"
+2. **OAuth Flow**: Frontend initiates Google OAuth → receives ID token
+3. **Backend Verification**: Frontend sends token to `POST /auth/google`
+   - Backend verifies Google ID token
+   - Checks if user exists in database by email
+   - Creates/updates user record
+   - Returns: `{isNewUser: boolean, session: {...}, profile?: {...}}`
+4. **Frontend Routing**: Same as phone flow
+
+#### Phone Auth Flow (Pending Twilio Approval)
 1. **Phone Entry**: User enters phone number in frontend
 2. **OTP Request**: Frontend calls `POST /auth/request-otp` → Backend calls Supabase
 3. **OTP Verification**: Frontend sends OTP to `POST /auth/verify-otp`
@@ -125,10 +138,11 @@ When the backend returns a 401 Unauthorized response:
 This provides the best UX - most token refreshes happen invisibly, and users only need to re-authenticate when absolutely necessary.
 
 ### Unified Auth Flow
-The app uses a single flow for both login and signup:
-1. User enters phone number
-2. User receives and enters OTP
-3. Backend checks if user exists:
+The app uses a single flow for both login and signup regardless of auth method:
+
+**For Any Auth Method (Google or Phone):**
+1. User authenticates (Google OAuth or Phone OTP)
+2. Backend checks if user exists:
    - **New users**: Directed to onboarding (username → taste profile)
    - **Existing users**: Directed straight to main app (tabs)
 
@@ -159,17 +173,26 @@ This approach eliminates user confusion about whether to "log in" or "sign up".
 - **TestFlight**: No changes, backend ready
 - **Note**: Auth implementation moved to Milestone 3 (frontend handles OAuth)
 
-#### Milestone 3: Connect Auth (Backend-Orchestrated Phone Auth)
-- Backend: Configure Supabase phone auth with Twilio
-- Backend: Implement `/auth/request-otp` endpoint
-- Backend: Implement `/auth/verify-otp` endpoint (returns isNewUser flag)
+#### Milestone 3: Connect Auth (Google OAuth First, Phone Later)
+**Phase 1 - Google OAuth (Immediate)**
+- Backend: Configure Supabase Google OAuth provider
+- Backend: Implement `/auth/google` endpoint (returns isNewUser flag)
 - Backend: Add JWT verification middleware for protected routes
+- Frontend: Add "Continue with Google" button to login screen
+- Frontend: Implement Google OAuth flow with Supabase
 - Frontend: Replace mock auth with real API calls
-- Frontend: Implement SecureStore for token storage (not AsyncStorage)
+- Frontend: Implement SecureStore for token storage
 - Frontend: Build API client with 401 interceptor for silent refresh
 - Frontend: Update auth store to handle real Supabase sessions
-- Frontend: Keep existing phone/OTP screens, wire to backend
-- **TestFlight**: Real phone authentication working end-to-end
+- **TestFlight**: Real Google authentication working end-to-end
+
+**Phase 2 - Phone Auth (After Twilio Approval)**
+- Backend: Configure Supabase phone auth with Twilio
+- Backend: Implement `/auth/request-otp` endpoint
+- Backend: Implement `/auth/verify-otp` endpoint
+- Frontend: Enable phone auth UI (already built)
+- Frontend: Wire phone/OTP screens to backend
+- **TestFlight**: Dual auth methods working
 
 #### Milestone 4: Production Polish
 - Error handling & retry logic
