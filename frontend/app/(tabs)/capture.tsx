@@ -42,27 +42,28 @@ export default function CaptureScreen() {
     setFlash(flash === 'off' ? 'on' : 'off');
   };
 
-  const renderFlashIcon = () => {
-    if (flash === 'off') {
-      return <Ionicons name="flash-off" size={24} color={colors.surface} />;
-    }
-    return <Ionicons name="flash" size={24} color={colors.surface} />;
-  };
-
   return (
     <Page style={styles.pageWithCamera} edges={['top', 'left', 'right']} backgroundColor="black">
       <View style={styles.cameraContainer}>
         <CameraView style={styles.camera} ref={cameraRef} flash={flash}>
           {/* overlay */}
           <View style={styles.cameraOverlay}>
-            {/* top controls */}
+            {/* 
+            top controls 
+            */}
             <View style={styles.topControls}>
+              {/* flash button */}
               <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
-                {renderFlashIcon()}
+                {flash === 'off' ? (
+                  <Ionicons name="flash-off" size={24} color={colors.surface} />
+                ) : (
+                  <Ionicons name="flash" size={24} color={colors.surface} />
+                )}
               </TouchableOpacity>
             </View>
-
-            {/* bottom controls */}
+            {/* 
+            bottom controls 
+            */}
             <View style={styles.bottomControls}>
               {/* gallery button */}
               <TouchableOpacity style={styles.galleryButton}>
