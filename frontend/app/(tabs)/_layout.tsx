@@ -12,6 +12,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="capture"
         options={{
+          title: 'Analyze',
           headerShown: false,
           tabBarIcon: ({ color }) => <Ionicons name="camera" color={color} size={24} />,
         }}
@@ -19,6 +20,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="settings"
         options={{
+          title: 'Settings',
           headerShown: false,
           tabBarIcon: ({ color }) => <Ionicons name="settings" color={color} size={24} />,
         }}
