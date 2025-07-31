@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -43,7 +45,9 @@ export default function PreviewScreen() {
 
   return (
     <Page style={styles.page} edges={['top', 'left', 'right']} backgroundColor="black">
-      <Image source={{ uri: photoUri }} style={styles.absoluteFillObject} resizeMode="contain" />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Image source={{ uri: photoUri }} style={styles.absoluteFillObject} resizeMode="contain" />
+      </TouchableWithoutFeedback>
 
       {/* Input Bar */}
       <KeyboardAvoidingView
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 24,
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
     maxHeight: 120,
