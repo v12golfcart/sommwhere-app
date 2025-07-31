@@ -1,12 +1,12 @@
 import { StyleSheet, Text } from 'react-native';
-import { colors } from '../../src/theme';
-import { Page } from '../../src/components';
+import { colors } from '../../../src/theme';
+import { Page } from '../../../src/components';
 
-export default function SettingsScreen() {
+export default function PreviewScreen() {
   return (
-    <Page>
-      <Text style={styles.header}>Settings</Text>
-      <Text style={styles.subtitle}>Your settings page</Text>
+    <Page backgroundColor="black">
+      <Text style={styles.header}>Capture</Text>
+      <Text style={styles.subtitle}>Preview</Text>
     </Page>
   );
 }

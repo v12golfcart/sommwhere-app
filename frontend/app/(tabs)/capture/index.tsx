@@ -2,11 +2,13 @@ import { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Linking, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { CameraView, useCameraPermissions, FlashMode } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
-import { colors } from '../../src/theme';
-import { Page, Button } from '../../src/components';
+import { useRouter } from 'expo-router';
+import { colors } from '../../../src/theme';
+import { Page, Button } from '../../../src/components';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CaptureScreen() {
+  const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const [flash, setFlash] = useState<FlashMode>('off');
   const cameraRef = useRef<CameraView>(null);
@@ -47,6 +49,7 @@ export default function CaptureScreen() {
     // Add haptic feedback
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     console.log('takePhoto');
+    router.push('/capture/preview');
   };
 
   return (
@@ -164,16 +167,19 @@ const styles = StyleSheet.create({
   },
   topControls: {
     position: 'absolute',
-    top: 16,
+    top: 0,
     left: 0,
     right: 0,
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'blue',
   },
   flashButton: {
     width: 44,
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 15, // space matching the preview close button
   },
 });
