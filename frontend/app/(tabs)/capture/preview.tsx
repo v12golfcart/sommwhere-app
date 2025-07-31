@@ -13,7 +13,7 @@ export default function PreviewScreen() {
 
   return (
     <Page style={styles.page} edges={['top', 'left', 'right']} backgroundColor="black">
-      <Image source={{ uri: photoUri }} style={styles.absoluteFillObject} resizeMode="cover" />
+      <Image source={{ uri: photoUri }} style={styles.absoluteFillObject} resizeMode="contain" />
     </Page>
   );
 }

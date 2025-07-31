@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Linking, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { CameraView, useCameraPermissions, FlashMode } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
+import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { colors } from '../../../src/theme';
 import { Page, Button } from '../../../src/components';
@@ -88,6 +89,21 @@ export default function CaptureScreen() {
     }
   };
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      // allowsEditing: true,
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      router.push({
+        pathname: '/capture/preview',
+        params: { photoUri: result.assets[0].uri },
+      });
+    }
+  };
+
   return (
     <Page style={styles.pageWithCamera} edges={['top', 'left', 'right']} backgroundColor="black">
       <View style={styles.cameraContainer}>
@@ -112,7 +128,7 @@ export default function CaptureScreen() {
             */}
             <View style={styles.bottomControls}>
               {/* gallery button */}
-              <TouchableOpacity style={styles.galleryButton}>
+              <TouchableOpacity style={styles.galleryButton} onPress={pickImage}>
                 <Ionicons name="images" size={32} color={colors.surface} />
               </TouchableOpacity>
               {/* capture button */}
