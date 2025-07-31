@@ -3,6 +3,8 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CaptureLayout() {
+  const router = useRouter();
+  
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -16,10 +18,7 @@ export default function CaptureLayout() {
           headerLeft: ({ canGoBack }) =>
             canGoBack ? (
               <TouchableOpacity
-                onPress={() => {
-                  const router = useRouter();
-                  router.back();
-                }}
+                onPress={() => router.back()}
                 style={styles.headerLeft}
               >
                 <Ionicons name="close" size={32} color="white" />
