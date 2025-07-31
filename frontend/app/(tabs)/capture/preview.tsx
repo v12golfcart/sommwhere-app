@@ -6,9 +6,14 @@ import { Page } from '../../../src/components';
 export default function PreviewScreen() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
 
+  if (!photoUri) {
+    router.back();
+    return null;
+  }
+
   return (
     <Page style={styles.page} edges={['top', 'left', 'right']} backgroundColor="black">
-      <Image source={{ uri: photoUri }} style={styles.absoluteFillObject} />
+      <Image source={{ uri: photoUri }} style={styles.absoluteFillObject} resizeMode="cover" />
     </Page>
   );
 }

@@ -12,6 +12,7 @@ export default function CaptureScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [flash, setFlash] = useState<FlashMode>('off');
   const cameraRef = useRef<CameraView>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
 
   if (!permission) {
     return (
@@ -46,6 +47,9 @@ export default function CaptureScreen() {
   };
 
   const takePhoto = async () => {
+    if (isCapturing) return;
+    setIsCapturing(true);
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     if (cameraRef.current) {
@@ -70,6 +74,8 @@ export default function CaptureScreen() {
           // Don't mirror front camera images
           mirror: false,
         });
+
+        setIsCapturing(false);
 
         // Navigate with the photo URI
         router.push({
