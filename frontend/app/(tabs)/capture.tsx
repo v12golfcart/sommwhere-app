@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Linking, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { CameraView, useCameraPermissions, FlashMode } from 'expo-camera';
+import * as Haptics from 'expo-haptics';
 import { colors } from '../../src/theme';
 import { Page, Button } from '../../src/components';
 import { Ionicons } from '@expo/vector-icons';
@@ -42,6 +43,12 @@ export default function CaptureScreen() {
     setFlash(flash === 'off' ? 'on' : 'off');
   };
 
+  const takePhoto = async () => {
+    // Add haptic feedback
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    console.log('takePhoto');
+  };
+
   return (
     <Page style={styles.pageWithCamera} edges={['top', 'left', 'right']} backgroundColor="black">
       <View style={styles.cameraContainer}>
@@ -70,7 +77,7 @@ export default function CaptureScreen() {
                 <Ionicons name="images" size={32} color={colors.surface} />
               </TouchableOpacity>
               {/* capture button */}
-              <TouchableOpacity style={styles.captureButton}>
+              <TouchableOpacity style={styles.captureButton} onPress={takePhoto}>
                 <View style={styles.captureButtonInner} />
               </TouchableOpacity>
             </View>

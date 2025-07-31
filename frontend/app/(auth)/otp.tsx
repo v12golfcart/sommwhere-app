@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, TextInput as RNTextInput } from 'react-native';
 import { colors } from '../../src/theme';
 import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon, TextInput } from '../../src/components';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
 
 export default function OtpScreen() {
+  const router = useRouter();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(60);
   const inputs = useRef<(RNTextInput | null)[]>([]);

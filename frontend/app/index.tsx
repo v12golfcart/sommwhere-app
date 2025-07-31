@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { router, useRootNavigationState } from 'expo-router';
+import { useRouter, useRootNavigationState } from 'expo-router';
 import { Page } from '../src/components';
 import { colors } from '../src/theme';
 import { useAuthStore } from '../src/stores/authStore';
 
 export default function App() {
+  const router = useRouter();
   const navigationState = useRootNavigationState();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 

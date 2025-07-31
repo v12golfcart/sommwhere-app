@@ -2,11 +2,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../src/theme';
 import { Page } from '../../src/components';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../src/stores/authStore';
 import { Button, KeyboardAvoidingContainer } from '../../src/components';
 
 const SignUpButton = () => {
+  const router = useRouter();
   const login = useAuthStore((state) => state.login);
 
   const mockUser = {
@@ -25,6 +26,7 @@ const SignUpButton = () => {
 };
 
 const LogInButton = () => {
+  const router = useRouter();
   const login = useAuthStore((state) => state.login);
 
   const mockUser = {

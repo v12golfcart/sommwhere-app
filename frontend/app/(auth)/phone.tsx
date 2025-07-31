@@ -7,10 +7,11 @@ import {
   OnboardingIcon,
   TextInput,
 } from '../../src/components';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 
 export default function PhoneNumber() {
+  const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState('');
 
   // Basic US phone validation (10 digits)

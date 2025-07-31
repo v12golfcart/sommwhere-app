@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../../src/theme';
 import { Page, Button, KeyboardAvoidingContainer, OnboardingIcon, TextInput } from '../../../src/components';
 import { useAuthStore } from '../../../src/stores/authStore';
 
 export default function OnboardingTasteProfile() {
+  const router = useRouter();
   const [favoriteWine, setFavoriteWine] = useState('');
   const setTasteProfile = useAuthStore((state) => state.setTasteProfile);
   const user = useAuthStore((state) => state.user);
