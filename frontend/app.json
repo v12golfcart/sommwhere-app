@@ -37,6 +37,23 @@
         "projectId": "ec235518-402d-4297-8376-16dd5beece5a"
       }
     },
-    "plugins": ["expo-font", "expo-router"]
+    "plugins": [
+      "expo-font",
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to capture wine photos",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone (not used)",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos to select wine images"
+        }
+      ]
+    ]
   }
 }
