@@ -1,10 +1,10 @@
 import { StyleSheet, Text, Image } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { colors } from '../../../src/theme';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Page } from '../../../src/components';
 
 export default function PreviewScreen() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
+  const router = useRouter();
 
   if (!photoUri) {
     router.back();
