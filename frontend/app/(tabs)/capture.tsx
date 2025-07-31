@@ -33,9 +33,7 @@ export default function CaptureScreen() {
               : 'Grant access to your camera to take photos of wine.'}
           </Text>
           <Button
-            onPress={
-              permission?.status === 'denied' ? () => Linking.openSettings() : requestPermission
-            }
+            onPress={permission?.status === 'denied' ? Linking.openSettings : requestPermission}
             text={permission?.status === 'denied' ? 'Open Settings' : 'Grant Access'}
             style={styles.permissionButton}
           />
