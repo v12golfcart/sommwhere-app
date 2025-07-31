@@ -6,43 +6,40 @@ import { Page, Button } from '../../src/components';
 export default function CaptureScreen() {
   const [permission, requestPermission] = useCameraPermissions();
 
-  const renderPermissionScreen = () => {
+  if (permission?.granted) {
     return (
-      <View>
-        <Text style={styles.header}>Enable Camera Access</Text>
-        <Text style={styles.subtitle}>
-          {permission?.status === 'denied'
-            ? 'Please enable camera access in your device settings -- the Analyze feature will not work without it.'
-            : 'Grant access to your camera to take photos of wine.'}
-        </Text>
-        <Button
-          onPress={permission?.status === 'denied' ? Linking.openSettings : requestPermission}
-          text={permission?.status === 'denied' ? 'Open Settings' : 'Grant Access'}
-          style={styles.permissionButton}
-        />
-      </View>
+      <Page style={styles.pageWithCamera} edges={['top', 'left', 'right']} backgroundColor="black">
+        <View style={styles.cameraContainer}>
+          <CameraView style={styles.camera} />
+        </View>
+      </Page>
     );
-  };
-
-  const renderCameraScreen = () => {
+  } else {
     return (
-      <View>
-        <Text style={styles.header}>Capture</Text>
-        <Text style={styles.subtitle}>Take a photo of wine</Text>
-      </View>
+      <Page>
+        <View style={styles.container}>
+          <Text style={styles.header}>Enable Camera Access</Text>
+          <Text style={styles.subtitle}>
+            {permission?.status === 'denied'
+              ? 'Please enable camera access in your device settings -- the Analyze feature will not work without it.'
+              : 'Grant access to your camera to take photos of wine.'}
+          </Text>
+          <Button
+            onPress={permission?.status === 'denied' ? Linking.openSettings : requestPermission}
+            text={permission?.status === 'denied' ? 'Open Settings' : 'Grant Access'}
+            style={styles.permissionButton}
+          />
+        </View>
+      </Page>
     );
-  };
-
-  return (
-    <Page>
-      <View style={styles.container}>
-        {permission?.granted ? renderCameraScreen() : renderPermissionScreen()}
-      </View>
-    </Page>
-  );
+  }
 }
 
 const styles = StyleSheet.create({
+  pageWithCamera: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -61,5 +58,14 @@ const styles = StyleSheet.create({
   },
   permissionButton: {
     marginTop: 16,
+  },
+  cameraContainer: {
+    flex: 1,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    overflow: 'hidden',
+  },
+  camera: {
+    flex: 1,
   },
 });
