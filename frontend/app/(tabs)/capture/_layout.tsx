@@ -33,7 +33,7 @@ export default function CaptureLayout() {
 
 const styles = StyleSheet.create({
   headerLeft: {
-    marginLeft: 0,
+    marginLeft: -9, // space matching the camera flash button
     marginTop: 6, // space matching the camera flash button
     width: 44,
     height: 44,

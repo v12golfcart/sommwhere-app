@@ -172,14 +172,12 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'blue',
   },
   flashButton: {
     width: 44,
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 15, // space matching the preview close button
+    marginLeft: 6,
   },
 });
