@@ -46,10 +46,40 @@ export default function CaptureScreen() {
   };
 
   const takePhoto = async () => {
-    // Add haptic feedback
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    console.log('takePhoto');
-    router.push('/capture/preview');
+
+    if (cameraRef.current) {
+      try {
+        const photo = await cameraRef.current.takePictureAsync({
+          // Quality: Balance between file size and detail
+          quality: 0.8, // 80% quality - good balance for wine analysis
+
+          // Format: JPEG is preferred for photos (smaller files)
+          // PNG would be larger but potentially better for text/labels
+          // Default is JPEG which is perfect
+
+          // Skip processing for faster capture
+          skipProcessing: false, // Keep as false for proper orientation
+
+          // Don't include base64 in the response (saves memory)
+          base64: false,
+
+          // Include EXIF data (might be useful for wine context)
+          exif: false, // Set to true if you want camera settings/location
+
+          // Don't mirror front camera images
+          mirror: false,
+        });
+
+        // Navigate with the photo URI
+        router.push({
+          pathname: '/capture/preview',
+          params: { photoUri: photo.uri },
+        });
+      } catch (error) {
+        console.error('Error taking photo:', error);
+      }
+    }
   };
 
   return (
