@@ -1,6 +1,7 @@
+import React from 'react';
 import { Tabs, TabList, TabTrigger, TabSlot } from 'expo-router/ui';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
 import { colors } from '../../src/theme';
@@ -8,11 +9,9 @@ import { colors } from '../../src/theme';
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
+  const [showTabs, setShowTabs] = React.useState(false);
 
-  const tabBarStyle = StyleSheet.flatten([
-    styles.tabBar,
-    { paddingBottom: insets.bottom || 20 }
-  ]);
+  const tabBarStyle = StyleSheet.flatten([styles.tabBar, { paddingBottom: insets.bottom || 20 }]);
 
   return (
     <Tabs>
@@ -21,7 +20,17 @@ export default function TabsLayout() {
 
       {/* Custom tab bar at the bottom */}
       <TabList style={tabBarStyle}>
-        <TabTrigger name="capture" href="/capture" style={styles.tabTrigger}>
+        <View style={styles.customButtonContainer}>
+          <TouchableOpacity 
+            style={styles.refreshButton}
+            onPress={() => setShowTabs(!showTabs)}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="refresh" color={colors.surface} size={20} />
+            <Text style={styles.refreshButtonText}>Refresh</Text>
+          </TouchableOpacity>
+        </View>
+        <TabTrigger name="capture" href="/capture" style={[styles.tabTrigger, !showTabs && { display: 'none' }]}>
           <View style={styles.tabContent}>
             <Ionicons
               name="camera"
@@ -34,7 +43,7 @@ export default function TabsLayout() {
           </View>
         </TabTrigger>
 
-        <TabTrigger name="settings" href="/settings" style={styles.tabTrigger}>
+        <TabTrigger name="settings" href="/settings" style={[styles.tabTrigger, !showTabs && { display: 'none' }]}>
           <View style={styles.tabContent}>
             <Ionicons
               name="settings"
@@ -52,6 +61,9 @@ export default function TabsLayout() {
 }
 
 const styles = StyleSheet.create({
+  tabBarContainer: {
+    position: 'relative',
+  },
   tabBar: {
     backgroundColor: colors.surface,
     flexDirection: 'row',
@@ -79,6 +91,44 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontWeight: '500',
     color: colors.secondary,
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    top: -25,
+    left: '50%',
+    transform: [{ translateX: -25 }],
+  },
+  floatingButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colors.secondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  customButtonContainer: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  refreshButton: {
+    backgroundColor: colors.secondary,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  refreshButtonText: {
+    color: colors.surface,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
