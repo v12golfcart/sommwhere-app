@@ -9,4 +9,5 @@ export const colors = {
   border: "#D8D2C8", // faint linen
   error: "#9B2226", // crimson reserve
   success: "#2D6A4F", // verdant cask
+  inactive: "#8E8E93", // system gray
 }
