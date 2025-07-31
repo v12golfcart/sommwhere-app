@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs, TabList, TabTrigger, TabSlot } from 'expo-router/ui';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
 import { colors } from '../../src/theme';
@@ -9,9 +9,10 @@ import { colors } from '../../src/theme';
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const [showTabs, setShowTabs] = React.useState(false);
 
   const tabBarStyle = StyleSheet.flatten([styles.tabBar, { paddingBottom: insets.bottom || 20 }]);
+
+  const isViewingPreview = () => pathname.startsWith('/capture/preview');
 
   return (
     <Tabs>
@@ -20,50 +21,63 @@ export default function TabsLayout() {
 
       {/* Custom tab bar at the bottom */}
       <TabList style={tabBarStyle}>
-        <View style={styles.customButtonContainer}>
-          <TouchableOpacity 
-            style={styles.refreshButton}
-            onPress={() => setShowTabs(!showTabs)}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="refresh" color={colors.surface} size={20} />
-            <Text style={styles.refreshButtonText}>Refresh</Text>
-          </TouchableOpacity>
-        </View>
-        <TabTrigger name="capture" href="/capture" style={[styles.tabTrigger, !showTabs && { display: 'none' }]}>
+        {/* Analyze tab */}
+        <TabTrigger
+          name="capture"
+          href="/capture"
+          style={[styles.tabTrigger, isViewingPreview() && styles.tabTriggerHidden]}
+        >
           <View style={styles.tabContent}>
             <Ionicons
               name="camera"
-              color={pathname === '/capture' ? colors.secondary : colors.inactive}
+              color={pathname.startsWith('/capture') ? colors.secondary : colors.inactive}
               size={24}
             />
-            <Text style={pathname === '/capture' ? styles.tabLabelActive : styles.tabLabel}>
+            <Text style={pathname.startsWith('/capture') ? styles.tabLabelActive : styles.tabLabel}>
               Analyze
             </Text>
           </View>
         </TabTrigger>
 
-        <TabTrigger name="settings" href="/settings" style={[styles.tabTrigger, !showTabs && { display: 'none' }]}>
+        {/* Settings tab */}
+        <TabTrigger
+          name="settings"
+          href="/settings"
+          style={[styles.tabTrigger, isViewingPreview() && styles.tabTriggerHidden]}
+        >
           <View style={styles.tabContent}>
             <Ionicons
               name="settings"
-              color={pathname === '/settings' ? colors.secondary : colors.inactive}
+              color={pathname.startsWith('/settings') ? colors.secondary : colors.inactive}
               size={24}
             />
-            <Text style={pathname === '/settings' ? styles.tabLabelActive : styles.tabLabel}>
+            <Text
+              style={pathname.startsWith('/settings') ? styles.tabLabelActive : styles.tabLabel}
+            >
               Settings
             </Text>
           </View>
         </TabTrigger>
+
+        {/* Preview action buttons */}
+        <View
+          style={[styles.customButtonContainer, !isViewingPreview() && styles.tabTriggerHidden]}
+        >
+          <TouchableOpacity
+            style={styles.analyzeButton}
+            onPress={() => console.log('Analyze pressed')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="sparkles" color={colors.surface} size={20} />
+            <Text style={styles.analyzeButtonText}>Analyze</Text>
+          </TouchableOpacity>
+        </View>
       </TabList>
     </Tabs>
   );
 }
 
 const styles = StyleSheet.create({
-  tabBarContainer: {
-    position: 'relative',
-  },
   tabBar: {
     backgroundColor: colors.surface,
     flexDirection: 'row',
@@ -75,6 +89,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tabTriggerHidden: {
+    display: 'none',
   },
   tabContent: {
     alignItems: 'center',
@@ -92,32 +109,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.secondary,
   },
-  floatingButtonContainer: {
-    position: 'absolute',
-    top: -25,
-    left: '50%',
-    transform: [{ translateX: -25 }],
-  },
-  floatingButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.secondary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
   customButtonContainer: {
     flex: 1,
     marginHorizontal: 16,
   },
-  refreshButton: {
+  analyzeButton: {
     backgroundColor: colors.secondary,
-    paddingVertical: 12,
+    paddingVertical: 9, // matching tabs height
     paddingHorizontal: 24,
     borderRadius: 24,
     flexDirection: 'row',
@@ -125,39 +123,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
   },
-  refreshButtonText: {
+  analyzeButtonText: {
     color: colors.surface,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
 });
-
-// export default function TabsLayout() {
-//   return (
-//     <Tabs
-//       screenOptions={{
-//         tabBarActiveTintColor: colors.secondary,
-//         tabBarStyle: {
-//           backgroundColor: colors.surface,
-//         },
-//       }}
-//     >
-//       <Tabs.Screen
-//         name="capture"
-//         options={{
-//           title: 'Analyze',
-//           headerShown: false,
-//           tabBarIcon: ({ color }) => <Ionicons name="camera" color={color} size={24} />,
-//         }}
-//       />
-//       <Tabs.Screen
-//         name="settings"
-//         options={{
-//           title: 'Settings',
-//           headerShown: false,
-//           tabBarIcon: ({ color }) => <Ionicons name="settings" color={color} size={24} />,
-//         }}
-//       />
-//     </Tabs>
-//   );
-// }
