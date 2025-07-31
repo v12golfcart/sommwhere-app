@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from '../src/stores/authStore';
+import { useAppStore } from '../src/stores/appStore';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,11 +26,11 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontsError]);
 
-  // subscribe to zustand state changes
-  useEffect(() => {
-    let previousState = useAuthStore.getState();
+  // Helper function to create store subscriptions with logging
+  const createStoreSubscription = (store: any, storeName: string) => {
+    let previousState = store.getState();
 
-    const unsubscribe = useAuthStore.subscribe((state) => {
+    const unsubscribe = store.subscribe((state: any) => {
       const changes: Record<string, any> = {};
 
       // Compare each top-level property
@@ -46,7 +47,7 @@ export default function RootLayout() {
       });
 
       if (Object.keys(changes).length > 0) {
-        let logMessage = `\n[${Object.keys(changes).length} Auth State Changes]\n`;
+        let logMessage = `\n[${Object.keys(changes).length} ${storeName} State Changes]\n`;
         Object.entries(changes).forEach(([key, change]) => {
           logMessage += `  ${key}:\n`;
           logMessage += `    from: ${JSON.stringify(change.from)}\n`;
@@ -58,7 +59,18 @@ export default function RootLayout() {
       previousState = state;
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
+  };
+
+  // Subscribe to store changes
+  useEffect(() => {
+    const unsubscribeAuth = createStoreSubscription(useAuthStore, 'Auth');
+    const unsubscribeApp = createStoreSubscription(useAppStore, 'App');
+
+    return () => {
+      unsubscribeAuth();
+      unsubscribeApp();
+    };
   }, []);
 
   if (!fontsLoaded && !fontsError) {

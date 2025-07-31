@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Image,
@@ -12,19 +13,33 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Page } from '../../../src/components';
 import { colors } from '../../../src/theme';
-import { useAuthStore } from '../../../src/stores/authStore';
+import { useAuthStore, useAppStore } from '../../../src/stores';
 
 export default function PreviewScreen() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
+  const [sommInput, setSommInput] = useState('');
+  const sommPrompt = useAppStore((state) => state.sommPrompt);
+  const setSommPrompt = useAppStore((state) => state.setSommPrompt);
   const tasteProfile = user?.tasteProfile || '';
+
+  // Initialize both local and global state with taste profile
+  useEffect(() => {
+    setSommInput(tasteProfile);
+    setSommPrompt(tasteProfile);
+  }, [tasteProfile, setSommPrompt]);
 
   if (!photoUri) {
     router.back();
     return null;
   }
+
+  // Handle done button press
+  const handleSubmit = () => {
+    setSommPrompt(sommInput);
+  };
 
   return (
     <Page style={styles.page} edges={['top', 'left', 'right']} backgroundColor="black">
@@ -44,9 +59,13 @@ export default function PreviewScreen() {
             style={styles.input}
             placeholder="Tell me about this wine..."
             placeholderTextColor="rgba(255,255,255,0.5)"
-            defaultValue={tasteProfile}
+            value={sommInput}
+            onChangeText={setSommInput}
+            onSubmitEditing={handleSubmit}
             multiline
             maxLength={500}
+            returnKeyType="done"
+            blurOnSubmit={true}
           />
         </View>
       </KeyboardAvoidingView>
