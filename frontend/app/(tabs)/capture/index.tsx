@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   topControls: {
     position: 'absolute',
-    top: 0,
+    top: 8,
     left: 0,
     right: 0,
     flexDirection: 'row',

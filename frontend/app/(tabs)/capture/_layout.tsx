@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function CaptureLayout() {
   const router = useRouter();
-  
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -17,10 +17,7 @@ export default function CaptureLayout() {
           headerBackVisible: false,
           headerLeft: ({ canGoBack }) =>
             canGoBack ? (
-              <TouchableOpacity
-                onPress={() => router.back()}
-                style={styles.headerLeft}
-              >
+              <TouchableOpacity onPress={() => router.back()} style={styles.headerLeft}>
                 <Ionicons name="close" size={32} color="white" />
               </TouchableOpacity>
             ) : null,
@@ -33,7 +30,7 @@ export default function CaptureLayout() {
 const styles = StyleSheet.create({
   headerLeft: {
     marginLeft: -9, // space matching the camera flash button
-    marginTop: 6, // space matching the camera flash button
+    marginTop: 14, // space matching the camera flash button
     width: 44,
     height: 44,
     justifyContent: 'center',
