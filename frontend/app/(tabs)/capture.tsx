@@ -1,10 +1,18 @@
-import { StyleSheet, Text, View, Linking } from 'react-native';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { StyleSheet, Text, View, Linking, ActivityIndicator } from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { colors } from '../../src/theme';
 import { Page, Button } from '../../src/components';
 
 export default function CaptureScreen() {
   const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    return (
+      <Page backgroundColor="black">
+        <ActivityIndicator color={colors.text} size="large" />
+      </Page>
+    );
+  }
 
   if (permission?.granted) {
     return (
@@ -25,7 +33,9 @@ export default function CaptureScreen() {
               : 'Grant access to your camera to take photos of wine.'}
           </Text>
           <Button
-            onPress={permission?.status === 'denied' ? Linking.openSettings : requestPermission}
+            onPress={
+              permission?.status === 'denied' ? () => Linking.openSettings() : requestPermission
+            }
             text={permission?.status === 'denied' ? 'Open Settings' : 'Grant Access'}
             style={styles.permissionButton}
           />
