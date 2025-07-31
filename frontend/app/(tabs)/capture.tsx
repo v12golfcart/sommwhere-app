@@ -1,12 +1,13 @@
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Linking, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions, FlashMode } from 'expo-camera';
 import { colors } from '../../src/theme';
 import { Page, Button } from '../../src/components';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CaptureScreen() {
   const [permission, requestPermission] = useCameraPermissions();
+  const [flash, setFlash] = useState<FlashMode>('off');
   const cameraRef = useRef<CameraView>(null);
 
   if (!permission) {
@@ -37,16 +38,27 @@ export default function CaptureScreen() {
     );
   }
 
+  const toggleFlash = () => {
+    setFlash(flash === 'off' ? 'on' : 'off');
+  };
+
+  const renderFlashIcon = () => {
+    if (flash === 'off') {
+      return <Ionicons name="flash-off" size={24} color={colors.surface} />;
+    }
+    return <Ionicons name="flash" size={24} color={colors.surface} />;
+  };
+
   return (
     <Page style={styles.pageWithCamera} edges={['top', 'left', 'right']} backgroundColor="black">
       <View style={styles.cameraContainer}>
-        <CameraView style={styles.camera} ref={cameraRef}>
+        <CameraView style={styles.camera} ref={cameraRef} flash={flash}>
           {/* overlay */}
           <View style={styles.cameraOverlay}>
             {/* top controls */}
             <View style={styles.topControls}>
-              <TouchableOpacity style={styles.flashButton}>
-                <Ionicons name="flash-off" size={24} color={colors.surface} />
+              <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
+                {renderFlashIcon()}
               </TouchableOpacity>
             </View>
 
