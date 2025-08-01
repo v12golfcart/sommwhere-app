@@ -11,7 +11,7 @@ export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const router = useRouter();
-  const { photoUri } = useCaptureSessionStore();
+  const photoUri = useCaptureSessionStore((state) => state.photoUri);
 
   const tabBarStyle = StyleSheet.flatten([styles.tabBar, { paddingBottom: insets.bottom || 20 }]);
 

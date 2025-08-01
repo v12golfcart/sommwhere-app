@@ -23,7 +23,9 @@ export default function RootLayout() {
     PTSerifBoldItalic: require('../assets/fonts/PTSerif-BoldItalic.ttf'),
   });
   const router = useRouter();
-  const { setPhotoUri } = useCaptureSessionStore();
+  const setPhotoUri = useCaptureSessionStore((state) => state.setPhotoUri);
+  const setSommPrompt = useCaptureSessionStore((state) => state.setSommPrompt);
+  const tasteProfile = useAuthStore((state) => state.user?.tasteProfile) || '';
 
   // load fonts
   useEffect(() => {
@@ -90,6 +92,7 @@ export default function RootLayout() {
 
   const navReset = () => {
     setPhotoUri(null);
+    setSommPrompt(tasteProfile);
     router.back();
   };
 

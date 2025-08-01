@@ -45,6 +45,20 @@ This is a monorepo with the following structure:
 - **Authentication**: Supabase Auth with Phone/SMS (via Twilio)
 - **AI/ML**: TBD (likely using LangChain/LlamaIndex for agent orchestration)
 
+## Key Components
+
+### Frontend Components
+- **Page**: Base layout component with safe area handling
+- **Button/IconButton**: Themed button components
+- **WineResultCard**: Wine information display with actions
+- **SommPromptInput**: Reusable AI prompt input
+- **TextInput**: Styled text input component
+
+### State Management
+- **authStore**: Authentication state and user profile
+- **appStore**: General app state (currently empty)
+- **captureSessionStore**: Wine capture session (photo URI, prompt)
+
 ## Development Commands
 
 ### Frontend
@@ -68,9 +82,13 @@ cd backend
 ### Implemented
 - Onboarding flow with OAuth (mocked), username and wine preference selection
 - Backend API with Supabase database integration
+- Camera capture with gallery picker and preview
+- Wine results display UI with card components
+- Reusable sommelier prompt input component
 
 ### In Progress
 - Migration from OAuth to phone authentication (SMS via Twilio)
+- Wine capture backend integration
 
 ### Planned
 - Wine recommendations based on user preferences
@@ -125,17 +143,17 @@ The wine capture feature is the heart of sommwhere. It allows users to:
 
 ### Wine Capture Development Milestones
 
-#### Sub-milestone 1: Incorporate Camera
-- Add camera/gallery picker to capture screen
-- Use Expo ImagePicker for cross-platform support
-- Show selected image preview
-- Basic UI with "Take Photo" and "Choose from Gallery" options
+#### Sub-milestone 1: Incorporate Camera ✅ COMPLETE
+- ✅ Camera/gallery picker in capture screen
+- ✅ Expo ImagePicker integration
+- ✅ Image preview with unified state management
+- ✅ "Take Photo" and gallery buttons
 
-#### Sub-milestone 2: Send Pictures to Backend
-- Create `/analyze/wine` endpoint
-- Handle image upload (multipart/form-data)
-- Add loading state during upload
-- Store images temporarily for processing
+#### Sub-milestone 2: Send Pictures to Backend 🚧 IN PROGRESS
+- 🚧 Create `/analyze/wine` endpoint
+- ⏳ Handle image upload (multipart/form-data)
+- ✅ Loading state ready (analyze button)
+- ⏳ Store images temporarily for processing
 
 #### Sub-milestone 3: Analyze Picture & Identify Wines
 - Build AI agent for wine recognition

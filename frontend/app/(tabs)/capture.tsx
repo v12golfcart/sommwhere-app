@@ -33,7 +33,8 @@ export default function CaptureScreen() {
   const [flash, setFlash] = useState<FlashMode>('off');
   const cameraRef = useRef<CameraView>(null);
   const [isCapturing, setIsCapturing] = useState(false);
-  const { photoUri, setPhotoUri } = useCaptureSessionStore();
+  const photoUri = useCaptureSessionStore((state) => state.photoUri);
+  const setPhotoUri = useCaptureSessionStore((state) => state.setPhotoUri);
   const insets = useSafeAreaInsets();
 
   // Helper function to initialize photo session
