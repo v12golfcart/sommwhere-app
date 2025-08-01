@@ -4,7 +4,7 @@ import { Page } from '../../src/components';
 
 export default function SettingsScreen() {
   return (
-    <Page>
+    <Page style={styles.page}>
       <Text style={styles.header}>Settings</Text>
       <Text style={styles.subtitle}>Your settings page</Text>
     </Page>
@@ -12,6 +12,9 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
+  page: {
+    paddingTop: 16,
+  },
   header: {
     fontSize: 20,
     color: colors.secondary,

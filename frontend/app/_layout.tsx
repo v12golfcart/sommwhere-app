@@ -1,11 +1,15 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../src/stores/authStore';
 import { useAppStore } from '../src/stores/appStore';
+import { useCaptureSessionStore } from '../src/stores/captureSessionStore';
+import { colors } from '../src/theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,6 +22,8 @@ export default function RootLayout() {
     PTSerifItalic: require('../assets/fonts/PTSerif-Italic.ttf'),
     PTSerifBoldItalic: require('../assets/fonts/PTSerif-BoldItalic.ttf'),
   });
+  const router = useRouter();
+  const { setPhotoUri } = useCaptureSessionStore();
 
   // load fonts
   useEffect(() => {
@@ -66,10 +72,15 @@ export default function RootLayout() {
   useEffect(() => {
     const unsubscribeAuth = createStoreSubscription(useAuthStore, 'Auth');
     const unsubscribeApp = createStoreSubscription(useAppStore, 'App');
+    const unsubscribeCaptureSession = createStoreSubscription(
+      useCaptureSessionStore,
+      'CaptureSession',
+    );
 
     return () => {
       unsubscribeAuth();
       unsubscribeApp();
+      unsubscribeCaptureSession();
     };
   }, []);
 
@@ -77,18 +88,68 @@ export default function RootLayout() {
     return null;
   }
 
+  const navReset = () => {
+    setPhotoUri(null);
+    router.back();
+  };
+
   return (
     <SafeAreaProvider>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="analyze/index"
+          options={{
+            headerShown: true,
+            headerTransparent: false,
+            headerTitle: '',
+            headerBackTitle: 'Cancel',
+            headerShadowVisible: false,
+            headerStyle: {
+              backgroundColor: colors.background,
+            },
+            headerTintColor: colors.text, // Color of back button
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navReset()} style={styles.headerButton}>
+                <View style={styles.backButtonContainer}>
+                  <Ionicons
+                    name="chevron-back"
+                    size={28}
+                    color={colors.primary}
+                    style={styles.chevron}
+                  />
+                  <Text style={styles.headerButtonText}>Cancel</Text>
+                </View>
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Stack>
       <Toast />
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  headerText: {
+    fontSize: 16,
+    color: colors.text,
+  },
+  headerButton: {
+    marginLeft: 0,
+  },
+  backButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  chevron: {
+    marginRight: 5,
+    marginLeft: -6,
+  },
+  headerButtonText: {
+    fontSize: 17,
+    color: colors.primary,
+  },
+});

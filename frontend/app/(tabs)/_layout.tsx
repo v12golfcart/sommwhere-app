@@ -3,16 +3,19 @@ import { Tabs, TabList, TabTrigger, TabSlot } from 'expo-router/ui';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { colors } from '../../src/theme';
+import { useCaptureSessionStore } from '../../src/stores';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
+  const router = useRouter();
+  const { photoUri } = useCaptureSessionStore();
 
   const tabBarStyle = StyleSheet.flatten([styles.tabBar, { paddingBottom: insets.bottom || 20 }]);
 
-  const isViewingPreview = () => pathname.startsWith('/capture/preview');
+  const isViewingPreview = () => pathname.startsWith('/capture') && photoUri;
 
   return (
     <Tabs>
@@ -65,7 +68,7 @@ export default function TabsLayout() {
         >
           <TouchableOpacity
             style={styles.analyzeButton}
-            onPress={() => console.log('Analyze pressed')}
+            onPress={() => router.push('/analyze')}
             activeOpacity={0.7}
           >
             <Ionicons name="sparkles" color={colors.surface} size={20} />

@@ -1,19 +1,45 @@
+// React & React Native
 import { useState, useRef } from 'react';
-import { StyleSheet, Text, View, Linking, ActivityIndicator, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Linking,
+  ActivityIndicator,
+  TouchableOpacity,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+} from 'react-native';
+
+// Expo packages
 import { CameraView, useCameraPermissions, FlashMode } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
-import { colors } from '../../../src/theme';
-import { Page, Button } from '../../../src/components';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// Icons
 import { Ionicons } from '@expo/vector-icons';
 
+// Local imports
+import { Page, Button, SommPromptInput } from '../../src/components';
+import { colors } from '../../src/theme';
+import { useCaptureSessionStore } from '../../src/stores';
+
 export default function CaptureScreen() {
-  const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const [flash, setFlash] = useState<FlashMode>('off');
   const cameraRef = useRef<CameraView>(null);
   const [isCapturing, setIsCapturing] = useState(false);
+  const { photoUri, setPhotoUri } = useCaptureSessionStore();
+  const insets = useSafeAreaInsets();
+
+  // Helper function to initialize photo session
+  const initializePhotoSession = (uri: string) => {
+    setPhotoUri(uri);
+  };
 
   if (!permission) {
     return (
@@ -77,14 +103,10 @@ export default function CaptureScreen() {
         });
 
         setIsCapturing(false);
-
-        // Navigate with the photo URI
-        router.push({
-          pathname: '/capture/preview',
-          params: { photoUri: photo.uri },
-        });
+        initializePhotoSession(photo.uri);
       } catch (error) {
         console.error('Error taking photo:', error);
+        setIsCapturing(false);
       }
     }
   };
@@ -92,30 +114,22 @@ export default function CaptureScreen() {
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      // allowsEditing: true,
       quality: 0.8,
     });
 
     if (!result.canceled && result.assets[0]) {
-      router.push({
-        pathname: '/capture/preview',
-        params: { photoUri: result.assets[0].uri },
-      });
+      initializePhotoSession(result.assets[0].uri);
     }
   };
 
-  return (
-    <Page style={styles.pageWithCamera} edges={['top', 'left', 'right']} backgroundColor="black">
+  const renderCamera = () => {
+    return (
       <View style={styles.cameraContainer}>
         <CameraView style={styles.camera} ref={cameraRef} flash={flash}>
-          {/* overlay */}
           <View style={styles.cameraOverlay}>
-            {/* 
-            top controls 
-            */}
+            {/* Top controls */}
             <View style={styles.topControls}>
-              {/* flash button */}
-              <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
+              <TouchableOpacity style={styles.buttonHeaderLeft} onPress={toggleFlash}>
                 {flash === 'off' ? (
                   <Ionicons name="flash-off" size={24} color={colors.surface} />
                 ) : (
@@ -123,15 +137,11 @@ export default function CaptureScreen() {
                 )}
               </TouchableOpacity>
             </View>
-            {/* 
-            bottom controls 
-            */}
+            {/* Bottom controls */}
             <View style={styles.bottomControls}>
-              {/* gallery button */}
               <TouchableOpacity style={styles.galleryButton} onPress={pickImage}>
                 <Ionicons name="images" size={32} color={colors.surface} />
               </TouchableOpacity>
-              {/* capture button */}
               <TouchableOpacity style={styles.captureButton} onPress={takePhoto}>
                 <View style={styles.captureButtonInner} />
               </TouchableOpacity>
@@ -139,12 +149,50 @@ export default function CaptureScreen() {
           </View>
         </CameraView>
       </View>
+    );
+  };
+
+  const renderPreview = () => {
+    return (
+      <>
+        <Pressable style={styles.absoluteFillObject} onPress={Keyboard.dismiss}>
+          <Image
+            source={{ uri: photoUri || '' }}
+            style={styles.absoluteFillObject}
+            resizeMode="contain"
+          />
+        </Pressable>
+
+        <View style={styles.cameraOverlay} pointerEvents="box-none">
+          {/* Top controls */}
+          <View style={styles.topControls}>
+            <TouchableOpacity style={styles.buttonHeaderLeft} onPress={() => setPhotoUri(null)}>
+              <Ionicons name="close" size={32} color={colors.surface} />
+            </TouchableOpacity>
+          </View>
+          {/* Bottom controls */}
+          <KeyboardAvoidingView
+            style={styles.keyboardAvoid}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? insets.bottom + 25 : 0}
+          >
+            <SommPromptInput />
+          </KeyboardAvoidingView>
+        </View>
+      </>
+    );
+  };
+
+  return (
+    <Page style={styles.page} edges={['top', 'left', 'right']} backgroundColor="black">
+      {photoUri ? renderPreview() : renderCamera()}
     </Page>
   );
 }
 
 const styles = StyleSheet.create({
-  pageWithCamera: {
+  // Layout styles
+  page: {
     paddingLeft: 0,
     paddingRight: 0,
   },
@@ -152,6 +200,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+
+  // Permission screen styles
   header: {
     fontSize: 20,
     color: colors.secondary,
@@ -167,7 +217,8 @@ const styles = StyleSheet.create({
   permissionButton: {
     marginTop: 16,
   },
-  // camera
+
+  // Camera styles
   cameraContainer: {
     flex: 1,
     borderTopLeftRadius: 16,
@@ -177,17 +228,20 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  // camera overlay
   cameraOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cameraOverlayText: {
-    fontSize: 20,
-    color: colors.text,
-    fontFamily: 'Marcellus',
-    textAlign: 'center',
+
+  // Control styles
+  topControls: {
+    position: 'absolute',
+    top: 8,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   bottomControls: {
     position: 'absolute',
@@ -198,6 +252,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  buttonHeaderLeft: {
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 6,
+  },
+
+  // Camera controls
   captureButton: {
     width: 80,
     height: 80,
@@ -217,19 +280,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 32,
   },
-  topControls: {
+
+  // Preview styles
+  absoluteFillObject: {
     position: 'absolute',
-    top: 8,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    top: 0,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
+    bottom: 0,
   },
-  flashButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 6,
+  keyboardAvoid: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
