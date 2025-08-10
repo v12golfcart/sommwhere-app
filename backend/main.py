@@ -26,9 +26,11 @@ def create_app(test_config=None):
     # register blueprints
     from app.routes.profile import profile_bp
     app.register_blueprint(profile_bp)
+    from app.routes.analyze import analyze_bp
+    app.register_blueprint(analyze_bp)
 
     return app
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)

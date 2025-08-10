@@ -251,3 +251,113 @@ python main.py  # Runs on http://localhost:5000
 - `GET /health` - Health check
 - `GET /profile/<user_id>` - Get user profile
 - `PUT /profile/<user_id>` - Update user profile (username, taste_profile)
+
+## Appendix: Wine Agent Architecture
+
+### Overview
+The wine analysis system is designed with flexibility and experimentation in mind. Instead of committing to a single AI agent implementation, we're building a system that supports multiple agent versions running simultaneously. This allows for A/B testing, gradual rollouts, and risk-free experimentation with new approaches.
+
+### System Components
+
+#### 1. Agent Registry (Central Hub)
+- Maintains a catalog of all available agent versions (v1, v2, v3, etc.)
+- Each agent has a version identifier and human-readable description
+- Acts as a factory to create the appropriate agent on demand
+- Enforces a common interface that all agents must implement
+
+#### 2. Version Selection Logic (Traffic Router)
+Determines which agent to use for each request, with this priority order:
+1. **Developer Override** - API request headers for testing specific versions
+2. **User Preference** - Saved choice from settings (beta testers only)
+3. **A/B Test Assignment** - Automatic bucketing for experiments
+4. **Default Version** - Fallback for all other users
+
+#### 3. Wine Analysis Endpoint
+A single API endpoint (`/analyze/wine`) that:
+- Receives wine images and optional sommelier prompts
+- Determines which agent version to use
+- Routes the request to the appropriate agent
+- Returns results with metadata about which version was used
+- Logs all interactions for analytics
+
+#### 4. Agent Implementations
+Different versions of the wine analysis logic:
+- **v1 (Single Agent)**: One AI agent that handles all tasks - simpler to build and maintain
+- **v2 (Pipeline)**: Multiple specialized agents working together - more modular and debuggable
+- **v3+**: Future improvements and experiments
+- All versions follow the same input/output contract for compatibility
+
+#### 5. User Experience Tiers
+
+**Regular Users:**
+- Take photo → Get recommendations
+- No awareness of versions
+- Always get the current default or A/B test assignment
+
+**Beta Testers:**
+- Same photo flow
+- Can access "Wine Analysis Engine" in settings
+- Can switch between available versions
+- Preferences persist across sessions
+
+**Developers:**
+- Can force specific versions via API headers
+- Can query available versions via `/analyze/wine/versions`
+- Can run side-by-side comparisons
+
+### Benefits of This Architecture
+
+**Development Benefits:**
+- Build new versions without modifying existing ones
+- Test in production with real users safely
+- Easy rollback if issues arise
+- Clean separation of concerns
+
+**Business Benefits:**
+- A/B test different approaches with real metrics
+- Gather user feedback before full rollout
+- Validate improvements scientifically
+- Minimize risk of breaking changes
+
+**User Benefits:**
+- Stable experience for most users
+- Power users can experiment with new features
+- No disruption during upgrades
+- Gradual access to improvements
+
+### Migration Strategy
+
+1. **Phase 1: Single Version**
+   - Launch with v1 as the only option
+   - Establish baseline metrics
+
+2. **Phase 2: Developer Testing**
+   - Build v2 alongside v1
+   - Internal testing via headers
+
+3. **Phase 3: Beta Access**
+   - Enable version picker for beta users
+   - Gather qualitative feedback
+
+4. **Phase 4: A/B Testing**
+   - Small percentage gets v2 automatically
+   - Compare metrics between versions
+
+5. **Phase 5: Gradual Rollout**
+   - Increase v2 percentage based on results
+   - Monitor for issues
+
+6. **Phase 6: New Default**
+   - Make v2 the default
+   - Keep v1 as fallback option
+
+### Technical Implementation Notes
+
+- All agents share the same base interface for compatibility
+- Version selection happens at request time, not deployment time
+- User preferences stored in database, not app
+- Analytics track version usage for every request
+- Feature flags control who sees version picker
+- System designed to support 3+ versions simultaneously
+
+This architecture essentially creates an experimentation platform specifically for our AI agents, allowing us to innovate rapidly while maintaining stability for users.
