@@ -37,6 +37,7 @@ export default function AnalyzeScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [wineResults, setWineResults] = useState<Wine[]>([]);
+  const [currentInput, setCurrentInput] = useState('');
   // const insets = useSafeAreaInsets();
 
   // get data from store
@@ -44,33 +45,48 @@ export default function AnalyzeScreen() {
   const sommPrompt = useCaptureSessionStore((state) => state.sommPrompt);
   const tasteProfile = useAuthStore((state) => state.user?.tasteProfile);
 
-  useEffect(() => {
-    const analyze = async () => {
-      if (!photoUri) {
-        setError('No photo to analyze');
-        return;
-      }
+  const analyze = async (newSommPrompt?: string) => {
+    if (!photoUri) {
+      setError('No photo to analyze');
+      return;
+    }
 
-      try {
-        setLoading(true);
-        const results = (await analyzeImage(photoUri, tasteProfile, sommPrompt)) as WineResponse;
-        setWineResults(results.wines);
-      } catch (err) {
-        console.error('Error analyzing photo:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      setLoading(true);
+      // Use the new prompt if provided, otherwise use the one from store
+      const promptToUse = newSommPrompt !== undefined ? newSommPrompt : sommPrompt;
+      const results = (await analyzeImage(photoUri, tasteProfile, promptToUse)) as WineResponse;
+      setWineResults(results.wines);
+    } catch (err) {
+      console.error('Error analyzing photo:', err);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Initialize currentInput with the sommPrompt from store
+    setCurrentInput(sommPrompt || '');
     analyze();
   }, []);
 
   const handleSave = (wineName: string) => {
-    toast.success(`Saved ${wineName}`);
+    console.log(`Saved ${wineName}`);
   };
 
   const handleDrink = (wineName: string) => {
     console.log('Drink wine:', wineName);
+  };
+
+  const handleReanalyze = () => {
+    // Only reanalyze if the input has changed
+    if (currentInput !== sommPrompt) {
+      // Update the store with the new value
+      useCaptureSessionStore.getState().setSommPrompt(currentInput);
+      // Re-analyze with the new prompt
+      analyze(currentInput);
+    }
   };
 
   if (loading) {
@@ -120,6 +136,9 @@ export default function AnalyzeScreen() {
               iconColor={colors.primary}
               placeholderTextColor={colors.textMuted}
               placeholder="Ask me anything about these wines..."
+              value={currentInput}
+              onChangeText={setCurrentInput}
+              onSubmit={handleReanalyze}
             />
           </View>
         </View>

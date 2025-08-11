@@ -24,6 +24,8 @@ interface SommPromptInputProps {
   placeholderTextColor?: string;
   maxLength?: number;
   keyboardType?: KeyboardTypeOptions;
+  value?: string;
+  onChangeText?: (text: string) => void;
   
   // Behavior
   onSubmit?: () => void;
@@ -38,30 +40,44 @@ export const SommPromptInput: React.FC<SommPromptInputProps> = ({
   placeholderTextColor = "rgba(255,255,255,0.5)",
   maxLength = 500,
   keyboardType,
+  value,
+  onChangeText,
   onSubmit,
   blurOnSubmit = true,
 }) => {
   const user = useAuthStore((state) => state.user);
   const { sommPrompt, setSommPrompt } = useCaptureSessionStore();
-  const [localValue, setLocalValue] = useState(sommPrompt);
+  // Use controlled value if provided, otherwise use store
+  const [localValue, setLocalValue] = useState(value !== undefined ? value : sommPrompt);
   
-  // Initialize with user's taste profile if sommPrompt is empty
+  // Initialize with user's taste profile if sommPrompt is empty (only in uncontrolled mode)
   useEffect(() => {
-    if (!sommPrompt && user?.tasteProfile) {
-      const tasteProfile = user.tasteProfile;
-      setSommPrompt(tasteProfile);
-      setLocalValue(tasteProfile);
+    if (value === undefined) {
+      // Uncontrolled mode - use store
+      if (!sommPrompt && user?.tasteProfile) {
+        const tasteProfile = user.tasteProfile;
+        setSommPrompt(tasteProfile);
+        setLocalValue(tasteProfile);
+      } else {
+        setLocalValue(sommPrompt);
+      }
     } else {
-      setLocalValue(sommPrompt);
+      // Controlled mode - use prop value
+      setLocalValue(value);
     }
-  }, [sommPrompt, user?.tasteProfile, setSommPrompt]);
+  }, [sommPrompt, user?.tasteProfile, setSommPrompt, value]);
 
   const handleChangeText = (text: string) => {
     setLocalValue(text);
+    // Call external handler if provided
+    onChangeText?.(text);
   };
 
   const handleSubmit = () => {
-    setSommPrompt(localValue); // Update global state only on submit
+    // Only update store in uncontrolled mode
+    if (value === undefined) {
+      setSommPrompt(localValue);
+    }
     onSubmit?.();
     if (blurOnSubmit) {
       Keyboard.dismiss();
