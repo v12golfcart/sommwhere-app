@@ -149,11 +149,12 @@ The wine capture feature is the heart of sommwhere. It allows users to:
 - ✅ Image preview with unified state management
 - ✅ "Take Photo" and gallery buttons
 
-#### Sub-milestone 2: Send Pictures to Backend 🚧 IN PROGRESS
-- 🚧 Create `/analyze/wine` endpoint
-- ⏳ Handle image upload (multipart/form-data)
+#### Sub-milestone 2: Send Pictures to Backend ✅ COMPLETE
+- ✅ Create `/analyze` endpoint
+- ✅ Handle image upload (multipart/form-data)
 - ✅ Loading state ready (analyze button)
-- ⏳ Store images temporarily for processing
+- ✅ TypeScript interfaces for wine data
+- ✅ End-to-end pipeline working with mock data
 
 #### Sub-milestone 3: Analyze Picture & Identify Wines
 - Build AI agent for wine recognition

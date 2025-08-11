@@ -6,7 +6,7 @@ AI-powered wine sommelier app
 
 **Frontend**: ✅ Milestone 1 Complete! Full auth flow with mock authentication working
 **Backend**: ✅ Milestone 2 Complete! Flask API with Supabase database and profile endpoints
-**Current**: 🚧 Wine Capture Feature - Camera integration complete, analyze screen with results UI ready
+**Current**: ✅ Wine Capture Sub-milestone 2 Complete! End-to-end image analysis pipeline working
 **Next Steps**: Connect frontend to backend with real authentication (Milestone 3)
 
 ## Project Structure
@@ -209,13 +209,19 @@ This approach eliminates user confusion about whether to "log in" or "sign up".
 
 ### Completed
 - ✅ Sub-milestone 1: Camera integration with gallery picker
+- ✅ Sub-milestone 2: Send Pictures to Backend
+  - ✅ Created `/analyze` endpoint
+  - ✅ Image upload handling (multipart/form-data)
+  - ✅ Loading states and error handling
+  - ✅ Mock wine data response
+  - ✅ End-to-end pipeline: capture → analyze → display results
 - ✅ Photo preview state with unified capture screen
 - ✅ Analyze results screen with WineResultCard component
 - ✅ Reusable SommPromptInput component for AI interaction
 - ✅ State management with captureSessionStore
 
 ### In Progress
-- 🚧 Sub-milestone 2: Backend `/analyze/wine` endpoint
+- 🚧 Sub-milestone 3: Analyze Picture & Identify Wines (using real AI)
 
 ### Components Created
 - **WineResultCard**: Displays wine information with Save/Drink actions
