@@ -1,32 +1,63 @@
-import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../src/theme';
 import { Page, WineResultCard, SommPromptInput } from '../../src/components';
+import { useCaptureSessionStore, useAuthStore } from '../../src/stores';
+import { analyzeImage } from '../../src/services';
+
+interface Wine {
+  wineName: string;
+  tastingNotes: string;
+  varietal?: string;
+  winery?: string;
+  year?: string;
+  region?: string;
+}
+
+interface WineResponse {
+  wines: Wine[];
+}
 
 export default function AnalyzeScreen() {
-  const insets = useSafeAreaInsets();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [wineResults, setWineResults] = useState<Wine[]>([]);
+  // const insets = useSafeAreaInsets();
 
-  // Mock data for now - will be replaced with actual API response
-  const mockWineResults = [
-    {
-      varietal: 'Cabernet Sauvignon',
-      wineName: 'Insignia',
-      winery: 'Joseph Phelps',
-      year: '2019',
-      region: 'Napa Valley, CA',
-      tastingNotes:
-        'Rich and opulent with layers of dark fruit, cassis, and espresso. Velvety tannins frame a long, complex finish with hints of dark chocolate and cedar.',
-    },
-    {
-      varietal: 'Pinot Noir',
-      wineName: 'Russian River Valley',
-      winery: 'Williams Selyem',
-      year: '2021',
-      region: 'Sonoma County, CA',
-      tastingNotes:
-        'Elegant and refined with bright cherry and raspberry notes. Silky texture with subtle earth and spice undertones.',
-    },
-  ];
+  // get data from store
+  const photoUri = useCaptureSessionStore((state) => state.photoUri);
+  const sommPrompt = useCaptureSessionStore((state) => state.sommPrompt);
+  const tasteProfile = useAuthStore((state) => state.user?.tasteProfile);
+
+  useEffect(() => {
+    const analyze = async () => {
+      if (!photoUri) {
+        setError('No photo to analyze');
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const results = (await analyzeImage(photoUri, tasteProfile, sommPrompt)) as WineResponse;
+        setWineResults(results.wines);
+      } catch (err) {
+        console.error('Error analyzing photo:', err);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+    analyze();
+  }, []);
 
   const handleSave = (wineName: string) => {
     console.log('Save wine:', wineName);
@@ -35,6 +66,9 @@ export default function AnalyzeScreen() {
   const handleDrink = (wineName: string) => {
     console.log('Drink wine:', wineName);
   };
+
+  if (loading) return <ActivityIndicator />;
+  if (error) return <Text>{error}</Text>;
 
   return (
     <KeyboardAvoidingView
@@ -49,7 +83,7 @@ export default function AnalyzeScreen() {
           keyboardShouldPersistTaps="handled"
           // keyboardDismissMode="on-drag"
         >
-          {mockWineResults.map((wine, index) => (
+          {wineResults.map((wine, index) => (
             <WineResultCard
               key={index}
               varietal={wine.varietal}

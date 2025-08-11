@@ -7,7 +7,7 @@ def health():
     return jsonify({'status': 'ok'}), 200
 
 
-@analyze_bp.route('/', methods=['POST'])
+@analyze_bp.route('', methods=['POST']) 
 def analyze():
     # check if the request has an image
     if 'image' not in request.files:
@@ -28,8 +28,8 @@ def analyze():
       "wines": [
         {
           "varietal": "Cabernet Sauvignon",
-          "wineName": "Insignia",
-          "winery": "Joseph Phelps",
+          "wineName": "Austin Hope Cabernet Sauvignon",
+          "winery": "Austin Hope",
           "year": "2019",
           "region": "Napa Valley, CA",
           "tastingNotes": "Rich and opulent with layers of dark fruit, cassis, and espresso. Velvety tannins frame a long, complex finish with hints of dark chocolate and cedar."
