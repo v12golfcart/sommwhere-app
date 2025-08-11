@@ -20,7 +20,7 @@ Rules:
   - producer: string | null       (e.g., "Joseph Phelps")
   - vintage: string | null        (four-digit year if visible; else null)
   - region: string | null         (e.g., "Napa Valley, CA"; null if unknown)
-  - tastingNotes: string          (1–2 sentences; ≤150 characters total; friendly and approachable)
+  - tastingNotes: string          (1–2 sentences; ≤255 characters total; friendly and approachable)
   - personalization: object | null
       - When a tasteProfile or sommPrompt is provided, include:
         - relevance: number       (0.0–1.0 reflecting fit to the user’s preferences/request)
@@ -57,7 +57,7 @@ def build_user_text(taste_profile: str | None, somm_prompt: str | None) -> str:
         "Remember:\n"
         "- Return {\"wines\": []} if this is not a wine bottle label or you cannot identify a wine.\n"
         "- Use null for unknown fields.\n"
-        "- tastingNotes must be ≤150 characters total."
+        "- tastingNotes must be ≤255 characters total."
     )
 
 def analyze_image_url(
