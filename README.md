@@ -370,3 +370,142 @@ Different versions of the wine analysis logic:
 - System designed to support 3+ versions simultaneously
 
 This architecture essentially creates an experimentation platform specifically for our AI agents, allowing us to innovate rapidly while maintaining stability for users.
+
+## Appendix: Wine Analysis Agent v1 Implementation Plan
+
+### API Contract (MVP)
+
+**Request** (multipart/form-data):
+- `image`: Required. MIME type `image/*`, max 10MB
+- `tasteProfile`: Optional string. User's wine preferences
+- `sommPrompt`: Optional string. Specific request
+
+**Success Response** (200 OK):
+```json
+{
+  "wines": [
+    {
+      "varietal": "Cabernet Sauvignon",         // Canonicalized grape variety
+      "producer": "Austin Hope",                // Winery/producer name
+      "wineName": "Special Selection",          // Label/cuvée name or null
+      "vintage": "2019",                        // Year as string or null
+      "region": "Napa Valley, CA",              // Region or null
+      "tastingNotes": "Rich dark fruit with...", // Max 150 chars
+      "personalization": {                      // Can be null if no profile
+        "relevance": 0.85,                      // 0-1 score
+        "note": "Matches your bold reds preference"
+      }
+    }
+  ]
+}
+```
+
+**Error Response** (400):
+```json
+{
+  "error": "No wines detected. Try a clearer photo of the label."
+}
+```
+
+### Implementation Approach (MVP)
+
+**Single Agent Module** (`backend/app/agents/somm_v1.py`):
+
+1. **Validate** - Check MIME type, file size, base64 encoding size
+2. **Extract & Personalize** - Send image + preferences to GPT-4V (sync, with timeout)
+3. **Handle Empty** - Return 400 if no wines detected
+4. **Return** - Strict JSON matching frontend expectations
+
+### GPT-4 Vision Integration Tips
+
+```python
+from openai import OpenAI
+
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+# Sync call with timeout and structured output
+response = client.chat.completions.create(
+    model="gpt-4-vision-preview",
+    response_format={"type": "json_object"},
+    timeout=30,  # 30 second timeout
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a wine expert. Extract wine details from bottle labels and return JSON."
+        },
+        {
+            "role": "user", 
+            "content": [
+                {"type": "text", "text": "Analyze this wine bottle"},
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+            ]
+        }
+    ]
+)
+```
+
+### Prompt Engineering Strategy
+
+- **Strict JSON mode** - Use `response_format` to guarantee valid JSON
+- **Clear instructions** - "Extract producer, wine name, varietal, vintage, region"
+- **Handle unknowns** - "Return null for missing fields rather than guessing"
+- **Concise notes** - "Write 1-2 sentence tasting notes, friendly and approachable"
+- **Include preferences** - Pass taste profile and somm prompt for intelligent personalization
+- **Let AI interpret** - GPT-4V evaluates relevance and explains why wines match preferences
+
+### MVP Scope Decisions
+
+**Include:**
+- Bottle label recognition only (wine lists as stretch goal)
+- Basic personalization with relevance scoring
+- Simple error messages
+- Direct GPT-4V integration
+- Input validation (MIME type, file size < 10MB)
+- Tasting notes capped at 150 characters
+- Basic logging (wines found, profile presence)
+
+**Exclude (for now):**
+- Caching (optimize later if needed)
+- Confidence scores per wine
+- Price extraction
+- Scene type detection
+- Complex error codes
+- OCR evidence/snippets
+
+### Quick Implementation Path
+
+```python
+class SommV1Agent:
+    def analyze(self, image_data: bytes, taste_profile=None, somm_prompt=None):
+        # 1. Validate & encode image
+        base64_image = base64.b64encode(image_data).decode('utf-8')
+        if len(base64_image) > 13.5 * 1024 * 1024:
+            raise ValueError("Image too large")
+        
+        # 2. Extract wines AND personalize (GPT-4V handles both)
+        wines = self._extract_and_personalize(
+            base64_image, taste_profile, somm_prompt
+        )
+        
+        # 3. Handle empty result in endpoint (return 400)
+        if not wines:
+            return {"wines": []}
+            
+        return {"wines": wines}
+```
+
+### Testing Approach
+
+Keep 10-15 test images:
+- Clear bottle labels (various varietals)
+- Slightly angled shots
+- Different lighting conditions
+- Non-wine images (should error gracefully)
+
+Track metrics:
+- Successful extraction rate
+- Field completeness (how many fields filled)
+- Personalization relevance
+- Response time
+
+This lean approach ships value quickly while maintaining quality and setting up for future enhancements.

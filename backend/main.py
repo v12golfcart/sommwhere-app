@@ -1,6 +1,7 @@
 from flask import Flask 
 from flask_cors import CORS
 from dotenv import load_dotenv
+from app.config import Config
 import os
 
 # load environment variables
@@ -11,9 +12,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     # configuration
-    app.config['SUPABASE_URL'] = os.environ.get('SUPABASE_URL')
-    app.config['SUPABASE_SERVICE_KEY'] = os.environ.get('SUPABASE_SERVICE_KEY')
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    app.config.from_object(Config)
 
     # enable cors
     CORS(app)
