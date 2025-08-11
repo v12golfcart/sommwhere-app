@@ -24,7 +24,7 @@ interface AuthStore {
 export const useAuthStore = create<AuthStore>((set) => ({
   // Initial state
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: true, // TEMPORARY
   isLoading: false,
 
   // auth actions

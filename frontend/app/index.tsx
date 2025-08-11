@@ -17,8 +17,8 @@ export default function App() {
     }
 
     // if the user is authenticated, redirect to the capture screen
-    if (true) {
-      // if (isAuthenticated) {
+    // if (true) {
+    if (isAuthenticated) {
       router.replace('/capture');
     } else {
       router.replace('/login');

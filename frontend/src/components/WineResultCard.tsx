@@ -8,12 +8,12 @@ interface Personalization {
 }
 
 interface WineResultCardProps {
-  varietal: string;
   wineName: string;
-  producer: string;
+  tastingNotes: string;
+  varietal?: string;
+  producer?: string;
   vintage?: string;
   region?: string;
-  tastingNotes?: string;
   personalization?: Personalization | null;
   onSave?: () => void;
   onDrink?: () => void;
@@ -40,15 +40,17 @@ export const WineResultCard: React.FC<WineResultCardProps> = ({
   return (
     <View style={styles.card}>
       {/* Varietal pill */}
-      <View style={styles.varietalPill}>
-        <Text style={styles.varietalText}>{varietal}</Text>
-      </View>
+      {varietal && (
+        <View style={styles.varietalPill}>
+          <Text style={styles.varietalText}>{varietal}</Text>
+        </View>
+      )}
 
       {/* Wine header */}
       <View style={styles.headerRow}>
         <View style={styles.headerLeft}>
           <Text style={styles.wineName}>{wineName}</Text>
-          <Text style={styles.producer}>{producer}</Text>
+          {producer && <Text style={styles.producer}>{producer}</Text>}
         </View>
         {vintage && <Text style={styles.vintage}>{vintage}</Text>}
       </View>
