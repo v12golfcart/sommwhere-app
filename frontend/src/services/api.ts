@@ -1,5 +1,5 @@
-const API_URL = 'https://winepoc.ngrok.io'; // local
-// const API_URL = 'https://api.sommwhere.ai'; // prod
+// const API_URL = 'https://winepoc.ngrok.io'; // local
+const API_URL = 'https://api.sommwhere.ai'; // prod
 
 export const analyzeImage = async (
   photoUri: string,
