@@ -2,6 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from '../theme';
 
+interface Personalization {
+  relevance: number;
+  note: string;
+}
+
 interface WineResultCardProps {
   varietal: string;
   wineName: string;
@@ -9,6 +14,7 @@ interface WineResultCardProps {
   vintage?: string;
   region?: string;
   tastingNotes?: string;
+  personalization?: Personalization | null;
   onSave?: () => void;
   onDrink?: () => void;
 }
@@ -20,9 +26,17 @@ export const WineResultCard: React.FC<WineResultCardProps> = ({
   vintage,
   region,
   tastingNotes,
+  personalization,
   onSave,
   onDrink,
 }) => {
+  // Get emoji based on relevance score
+  const getRelevanceEmoji = (relevance: number) => {
+    if (relevance >= 0.8) return '🟢'; // green
+    if (relevance >= 0.5) return '🟡'; // yellow
+    return '🔴'; // red
+  };
+
   return (
     <View style={styles.card}>
       {/* Varietal pill */}
@@ -46,8 +60,15 @@ export const WineResultCard: React.FC<WineResultCardProps> = ({
       <View style={styles.divider} />
 
       {/* Tasting notes */}
-      {tastingNotes && (
-        <Text style={styles.tastingNotes}>{tastingNotes}</Text>
+      {tastingNotes && <Text style={styles.tastingNotes}>{tastingNotes}</Text>}
+
+      {/* Personalization */}
+      {personalization && (
+        <View style={styles.personalizationContainer}>
+          <Text style={styles.personalization}>
+            {getRelevanceEmoji(personalization.relevance)} {personalization.note}
+          </Text>
+        </View>
       )}
 
       {/* Action buttons */}
@@ -79,7 +100,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  
+
   // Varietal pill
   varietalPill: {
     backgroundColor: `${colors.primary}15`, // 15% opacity
@@ -95,7 +116,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: '600',
   },
-  
+
   // Header
   headerRow: {
     flexDirection: 'row',
@@ -124,7 +145,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: '600',
   },
-  
+
   // Region
   region: {
     fontSize: 14,
@@ -133,14 +154,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 16,
   },
-  
+
   // Divider
   divider: {
     height: 1,
     backgroundColor: colors.border,
     marginVertical: 16,
   },
-  
+
   // Tasting notes
   tastingNotes: {
     fontSize: 15,
@@ -149,9 +170,22 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginBottom: 20,
   },
-  
+
+  // Personalization
+  personalizationContainer: {
+    marginTop: 4,
+  },
+  personalization: {
+    fontSize: 15,
+    fontFamily: 'PTSerif-Italic',
+    fontStyle: 'italic',
+    color: colors.text,
+    lineHeight: 22,
+  },
+
   // Buttons
   buttonRow: {
+    marginTop: 16,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     gap: 12,

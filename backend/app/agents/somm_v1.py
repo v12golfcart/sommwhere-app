@@ -1,5 +1,6 @@
 import os
 import json
+import base64
 from app.config import Config
 from openai import OpenAI 
 
@@ -69,6 +70,7 @@ def analyze_image_url(
     """
     Sends a single image URL through GPT-5 with our strict prompts, returns a dict matching the contract: {"wines": []}
     """
+    print('analyzing image with openai')
     user_text = build_user_text(taste_profile, somm_prompt)
 
     resp = client.responses.create(
@@ -93,7 +95,32 @@ def analyze_image_url(
     )
 
     data = resp.output_text
+    print(data)
+    # Parse JSON string to dictionary
+    if isinstance(data, str):
+        data = json.loads(data)
     return data
+
+
+def analyze_image_bytes(
+    image_bytes: bytes,
+    taste_profile: str | None = None,
+    somm_prompt: str | None = None,
+    timeout_sec: int = 30,
+) -> dict:
+    """Convert bytes to base64 data URL and analyze"""
+    # Convert to base64
+    base64_image = base64.b64encode(image_bytes).decode('utf-8')
+    
+    # Check size (13.5MB limit after encoding)
+    if len(base64_image) > 13.5 * 1024 * 1024:
+        raise ValueError("Image too large after encoding")
+    
+    # Create data URL
+    image_url = f"data:image/jpeg;base64,{base64_image}"
+    
+    # Call existing function
+    return analyze_image_url(image_url, taste_profile, somm_prompt, timeout_sec)
 
 
 if __name__ == "__main__":

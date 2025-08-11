@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from app.agents.somm_v1 import analyze_image_bytes  # or analyze_image_url if you adapt it
 
 analyze_bp = Blueprint('analyze', __name__, url_prefix='/analyze')
 
@@ -24,24 +25,23 @@ def analyze():
     if not image.filename.lower().split('.')[-1] in allowed_extensions:
         return jsonify({'error': 'Invalid file type. Allowed: png, jpg, jpeg'}), 400
 
-    response =  {
-      "wines": [
-        {
-          "varietal": "Cabernet Sauvignon",
-          "wineName": "Austin Hope Cabernet Sauvignon",
-          "producer": "Austin Hope",
-          "vintage": "2019",
-          "region": "Napa Valley, CA",
-          "tastingNotes": "Rich and opulent with layers of dark fruit, cassis, and espresso. Velvety tannins frame a long, complex finish with hints of dark chocolate and cedar."
-        },
-        {
-          "varietal": "Pinot Noir",
-          "wineName": "Russian River Valley",
-          "producer": "Williams Selyem",
-          "vintage": "2021",
-          "region": "Sonoma County, CA",
-          "tastingNotes": "Elegant and refined with bright cherry and raspberry notes. Silky texture with subtle earth and spice undertones."
-        }
-      ]
-    }
-    return jsonify(response), 200
+    try:
+        # Read image bytes
+        image_bytes = image.read()
+        
+        # Call the agent (you'll need to add analyze_image_bytes to somm_v1.py)
+        response = analyze_image_bytes(
+            image_bytes,
+            taste_profile=taste_profile if taste_profile else None,
+            somm_prompt=somm_prompt if somm_prompt else None
+        )
+        
+        # Check for empty wines
+        if not response.get("wines"):
+            return jsonify({"error": "No wines detected. Try a clearer photo of the label."}), 400
+        
+        return jsonify(response), 200
+        
+    except Exception as e:
+        print(f"Error analyzing image: {e}")
+        return jsonify({"error": "Failed to analyze image. Please try again."}), 400

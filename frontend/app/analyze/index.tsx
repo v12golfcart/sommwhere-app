@@ -14,6 +14,11 @@ import { Page, WineResultCard, SommPromptInput } from '../../src/components';
 import { useCaptureSessionStore, useAuthStore } from '../../src/stores';
 import { analyzeImage } from '../../src/services';
 
+interface Personalization {
+  relevance: number;
+  note: string;
+}
+
 interface Wine {
   wineName: string;
   tastingNotes: string;
@@ -21,6 +26,7 @@ interface Wine {
   producer?: string;
   vintage?: string;
   region?: string;
+  personalization?: Personalization | null;
 }
 
 interface WineResponse {
@@ -60,19 +66,25 @@ export default function AnalyzeScreen() {
   }, []);
 
   const handleSave = (wineName: string) => {
-    console.log('Save wine:', wineName);
+    toast.success(`Saved ${wineName}`);
   };
 
   const handleDrink = (wineName: string) => {
     console.log('Drink wine:', wineName);
   };
 
-  if (loading) return <ActivityIndicator />;
+  if (loading) {
+    return (
+      <Page style={styles.page}>
+        <ActivityIndicator size="large" />
+      </Page>
+    );
+  }
   if (error) return <Text>{error}</Text>;
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.keyboardAvoidingView}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // 64 for header height
     >
@@ -92,6 +104,7 @@ export default function AnalyzeScreen() {
               vintage={wine.vintage}
               region={wine.region}
               tastingNotes={wine.tastingNotes}
+              personalization={wine.personalization}
               onSave={() => handleSave(wine.wineName)}
               onDrink={() => handleDrink(wine.wineName)}
             />
@@ -116,6 +129,9 @@ export default function AnalyzeScreen() {
 }
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   page: {
     flex: 1,
     paddingTop: 0,
