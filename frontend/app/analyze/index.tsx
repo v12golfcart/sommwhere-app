@@ -18,8 +18,8 @@ interface Wine {
   wineName: string;
   tastingNotes: string;
   varietal?: string;
-  winery?: string;
-  year?: string;
+  producer?: string;
+  vintage?: string;
   region?: string;
 }
 
@@ -88,8 +88,8 @@ export default function AnalyzeScreen() {
               key={index}
               varietal={wine.varietal}
               wineName={wine.wineName}
-              winery={wine.winery}
-              year={wine.year}
+              producer={wine.producer}
+              vintage={wine.vintage}
               region={wine.region}
               tastingNotes={wine.tastingNotes}
               onSave={() => handleSave(wine.wineName)}

@@ -75,8 +75,20 @@ npm run format          # Format with Prettier
 ### Backend
 ```bash
 cd backend
-# Commands will be added as the project develops
+python -m venv venv      # Create virtual environment
+source venv/bin/activate # Activate venv (Mac/Linux)
+pip install -r requirements.txt  # Install dependencies
+python main.py           # Run development server
+gunicorn main:app        # Run production server locally
 ```
+
+## Deployment
+
+### Backend API
+- **Production URL**: https://api.sommwhere.ai
+- **Platform**: Railway
+- **Auto-deploys**: On push to main branch
+- **Root Directory**: /backend in Railway settings
 
 ## Key Features
 ### Implemented

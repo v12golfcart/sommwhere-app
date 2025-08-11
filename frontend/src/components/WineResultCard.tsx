@@ -5,8 +5,8 @@ import { colors } from '../theme';
 interface WineResultCardProps {
   varietal: string;
   wineName: string;
-  winery: string;
-  year?: string;
+  producer: string;
+  vintage?: string;
   region?: string;
   tastingNotes?: string;
   onSave?: () => void;
@@ -16,8 +16,8 @@ interface WineResultCardProps {
 export const WineResultCard: React.FC<WineResultCardProps> = ({
   varietal,
   wineName,
-  winery,
-  year,
+  producer,
+  vintage,
   region,
   tastingNotes,
   onSave,
@@ -34,9 +34,9 @@ export const WineResultCard: React.FC<WineResultCardProps> = ({
       <View style={styles.headerRow}>
         <View style={styles.headerLeft}>
           <Text style={styles.wineName}>{wineName}</Text>
-          <Text style={styles.winery}>{winery}</Text>
+          <Text style={styles.producer}>{producer}</Text>
         </View>
-        {year && <Text style={styles.year}>{year}</Text>}
+        {vintage && <Text style={styles.vintage}>{vintage}</Text>}
       </View>
 
       {/* Region subtitle */}
@@ -113,12 +113,12 @@ const styles = StyleSheet.create({
     color: colors.text,
     marginBottom: 2,
   },
-  winery: {
+  producer: {
     fontSize: 16,
     fontFamily: 'PTSerif',
     color: colors.text,
   },
-  year: {
+  vintage: {
     fontSize: 18,
     fontFamily: 'PTSerif',
     color: colors.text,

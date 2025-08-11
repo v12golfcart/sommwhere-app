@@ -4,10 +4,10 @@ AI-powered wine sommelier app
 
 ## Current Progress
 
-**Frontend**: ✅ Milestone 1 Complete! Full auth flow with mock authentication working
-**Backend**: ✅ Milestone 2 Complete! Flask API with Supabase database and profile endpoints
-**Current**: ✅ Wine Capture Sub-milestone 2 Complete! End-to-end image analysis pipeline working
-**Next Steps**: Connect frontend to backend with real authentication (Milestone 3)
+**Frontend**: ✅ Wine capture with image upload to backend
+**Backend**: ✅ Deployed to production at api.sommwhere.ai
+**Current**: 🚀 Production API live! End-to-end pipeline: capture → analyze → display
+**Next Steps**: Sub-milestone 3 - Implement real AI wine analysis with GPT-4 Vision
 
 ## Project Structure
 - `/frontend` - React Native (Expo) mobile app
@@ -31,7 +31,7 @@ AI-powered wine sommelier app
 - Flask for API framework
 - Supabase for auth & database
 - AI agents for wine analysis
-- Deployment: Railway
+- Deployment: Railway (Live at https://api.sommwhere.ai)
 
 **Core Features:**
 1. Authentication - User creation, login, profile management
@@ -221,7 +221,10 @@ This approach eliminates user confusion about whether to "log in" or "sign up".
 - ✅ State management with captureSessionStore
 
 ### In Progress
-- 🚧 Sub-milestone 3: Analyze Picture & Identify Wines (using real AI)
+- 🚧 Sub-milestone 3: Analyze Picture & Identify Wines
+  - Integrate GPT-4 Vision for wine recognition
+  - Extract wine details from images
+  - Generate personalized tasting notes
 
 ### Components Created
 - **WineResultCard**: Displays wine information with Save/Drink actions

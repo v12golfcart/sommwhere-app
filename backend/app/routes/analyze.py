@@ -29,16 +29,16 @@ def analyze():
         {
           "varietal": "Cabernet Sauvignon",
           "wineName": "Austin Hope Cabernet Sauvignon",
-          "winery": "Austin Hope",
-          "year": "2019",
+          "producer": "Austin Hope",
+          "vintage": "2019",
           "region": "Napa Valley, CA",
           "tastingNotes": "Rich and opulent with layers of dark fruit, cassis, and espresso. Velvety tannins frame a long, complex finish with hints of dark chocolate and cedar."
         },
         {
           "varietal": "Pinot Noir",
           "wineName": "Russian River Valley",
-          "winery": "Williams Selyem",
-          "year": "2021",
+          "producer": "Williams Selyem",
+          "vintage": "2021",
           "region": "Sonoma County, CA",
           "tastingNotes": "Elegant and refined with bright cherry and raspberry notes. Silky texture with subtle earth and spice undertones."
         }
