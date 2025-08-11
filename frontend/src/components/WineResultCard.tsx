@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
     fontFamily: 'PTSerif',
     color: colors.text,
     lineHeight: 22,
-    marginBottom: 20,
   },
 
   // Personalization
@@ -176,6 +175,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   personalization: {
+    marginTop: 16,
     fontSize: 15,
     fontFamily: 'PTSerif-Italic',
     fontStyle: 'italic',
