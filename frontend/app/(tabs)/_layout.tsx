@@ -46,12 +46,13 @@ export default function TabsLayout() {
         <TabTrigger
           name="mywines"
           href="/mywines"
+          reset="always"
           style={[styles.tabTrigger, isViewingPreview() && styles.tabTriggerHidden]}
         >
           <View style={styles.tabContent}>
             <Ionicons
               name="wine"
-              color={pathname.startsWith('/settings') ? colors.secondary : colors.inactive}
+              color={pathname.startsWith('/mywines') ? colors.secondary : colors.inactive}
               size={24}
             />
             <Text style={pathname.startsWith('/mywines') ? styles.tabLabelActive : styles.tabLabel}>
