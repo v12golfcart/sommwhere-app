@@ -42,22 +42,20 @@ export default function TabsLayout() {
           </View>
         </TabTrigger>
 
-        {/* Settings tab */}
+        {/* Your activity tab */}
         <TabTrigger
-          name="settings"
-          href="/settings"
+          name="mywines"
+          href="/mywines"
           style={[styles.tabTrigger, isViewingPreview() && styles.tabTriggerHidden]}
         >
           <View style={styles.tabContent}>
             <Ionicons
-              name="settings"
+              name="wine"
               color={pathname.startsWith('/settings') ? colors.secondary : colors.inactive}
               size={24}
             />
-            <Text
-              style={pathname.startsWith('/settings') ? styles.tabLabelActive : styles.tabLabel}
-            >
-              Settings
+            <Text style={pathname.startsWith('/mywines') ? styles.tabLabelActive : styles.tabLabel}>
+              My Wines
             </Text>
           </View>
         </TabTrigger>
