@@ -9,5 +9,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 44,
     width: '100%',
+    alignItems: 'center',
   },
 });

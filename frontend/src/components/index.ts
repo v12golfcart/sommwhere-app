@@ -6,3 +6,4 @@ export { TextInput } from './TextInput';
 export { WineResultCard } from './WineResultCard';
 export { SommPromptInput } from './SommPromptInput';
 export { default as Header } from './Header';
+export { default as Avatar } from './Avatar';
